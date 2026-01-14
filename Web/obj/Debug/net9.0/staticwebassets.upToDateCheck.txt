@@ -1,0 +1,6 @@
+wwwroot\css\site.css
+wwwroot\favicon.ico
+wwwroot\js\site.js
+E:\Proyectos\C#\Aprendizaje\Web\wwwroot\css\site.css
+E:\Proyectos\C#\Aprendizaje\Web\wwwroot\favicon.ico
+E:\Proyectos\C#\Aprendizaje\Web\wwwroot\js\site.js

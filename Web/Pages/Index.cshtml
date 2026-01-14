@@ -1,0 +1,134 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<style>
+    .main {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        grid-template-areas:
+            "principal side";
+        gap: 1.5em;
+    }
+
+    .principal {
+        grid-area: principal;
+    }
+
+    .side {
+        grid-area: side;
+    }
+</style>
+
+<div class="main">
+
+    <div class="principal">
+
+        <h2 class="section-title">Estadísticas</h2>
+
+        <!-- Stats con auto-fill: mantiene tamaño consistente -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">1,234</div>
+                <div class="stat-label">Usuarios Activos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">567</div>
+                <div class="stat-label">Ventas Hoy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">89%</div>
+                <div class="stat-label">Satisfacción</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Acciones Rápidas</h2>
+
+        <!-- Cards con auto-fit: se adaptan automáticamente sin media queries -->
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <h3 class="card-title">Crear Producto</h3>
+                <p class="card-description">Añade un nuevo producto al catálogo con todos sus detalles y configuración.</p>
+                <button class="card-action">Crear</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">👤</div>
+                <h3 class="card-title">Nuevo Usuario</h3>
+                <p class="card-description">Registra un nuevo usuario en el sistema.</p>
+                <button class="card-action">Registrar</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">Ver Reportes</h3>
+                <p class="card-description">Accede a los reportes detallados de ventas, inventario y análisis de tendencias del último trimestre.</p>
+                <button class="card-action">Acceder</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⚙️</div>
+                <h3 class="card-title">Configuración</h3>
+                <p class="card-description">Ajusta las preferencias del sistema.</p>
+                <button class="card-action">Configurar</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🔔</div>
+                <h3 class="card-title">Notificaciones</h3>
+                <p class="card-description">Gestiona las notificaciones y alertas del sistema para mantenerte informado de eventos importantes.</p>
+                <button class="card-action">Gestionar</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📧</div>
+                <h3 class="card-title">Enviar Email</h3>
+                <p class="card-description">Envía correos a tus usuarios.</p>
+                <button class="card-action">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="side">
+        <div class="result-grid">
+            <div class="result box_border box_shadow">
+                <div class="summary_icon">💸</div>
+                <div class="vertical-separator"></div>
+                <div class="summary_data">
+                    <label>Cuota reducida:</label>
+                    <div class="data">455,30 €</div>
+                </div>
+            </div>
+
+            <div class="result box_border box_shadow">
+                <div class="summary_icon">💳</div>
+                <div class="vertical-separator"></div>
+                <div class="summary_data">
+                    <label>Intereses pendientes:</label>
+                    <div class="data">19.270,85 €</div>
+                </div>
+            </div>
+
+            <div class="result box_border box_shadow">
+                <div class="summary_icon">⏱</div>
+                <div class="vertical-separator"></div>
+                <div class="summary_data">
+                    <label>Tiempo reducido a:</label>
+                    <div class="data">17 años y 8 meses</div>
+                </div>
+            </div>
+
+            <div class="result box_border box_shadow">
+                <div class="summary_icon">✅</div>
+                <div class="vertical-separator"></div>
+                <div class="summary_data">
+                    <label>Rentabilidad media:</label>
+                    <div class="data">5,26%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

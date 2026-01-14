@@ -1,0 +1,312 @@
+/* Minimal CSS Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base font sizing */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 48rem) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Focus styles */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+/* Remove default body bottom margin now handled by grid footer row */
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #212529;
+    background: #fff;
+}
+
+/* App grid layout */
+:root {
+    --app-header-height: 60px; /* as requested */
+    --app-sidebar-width: 250px; /* as requested */
+    --app-footer-height: 40px; /* as requested */
+    --gutter: 2rem;
+}
+
+.app-grid {
+    display: grid;
+    grid-template-columns: var(--app-sidebar-width) 1fr;
+    grid-template-rows: var(--app-header-height) 1fr var(--app-footer-height);
+    grid-template-areas:
+        "header header"
+        "sidebar main"
+        "footer footer";
+    /*min-height: 100vh;*/ /* allow page to grow beyond viewport so footer flows naturally */
+}
+
+.app-header {
+    grid-area: header;
+    /*height: var(--app-header-height);
+    min-height: var(--app-header-height);*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--gutter);
+    background: #2563eb;
+    color: white;
+    border-bottom: 1px solid #e9ecef;
+    position: sticky;  /*keep header fixed at top during vertical scroll */
+    top: 0;
+    z-index: 20;
+}
+
+.app-sidebar {
+    grid-area: sidebar;
+    padding: 1.5rem 1rem;
+    border-right: 1px solid #e9ecef;
+    background: #f8f9fa;
+    overflow: auto; /* allow sidebar to scroll independently if content exceeds height */
+}
+
+.app-main {
+    grid-area: main;
+    padding: var(--gutter);
+    /* let the page scroll naturally so footer is not fixed */
+    overflow: visible;
+}
+
+.app-footer {
+    grid-area: footer;
+    /*height: var(--app-footer-height);*/
+    /*min-height: var(--app-footer-height);*/
+    display: flex;
+    align-items: center;
+    padding: 0 var(--gutter);
+    background: #fff;
+    justify-content: center;
+}
+
+/* Small screens: transform to single column flow with header, main, footer (sidebar collapses above main) */
+@media (max-width: 767px) {
+    .app-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: var(--app-header-height) auto var(--app-footer-height);
+        grid-template-areas:
+            "header"
+            "main"
+            "footer";
+    }
+
+    .app-sidebar {
+        display: none; /* keep layout simple on small screens */
+    }
+
+    .app-header {
+        padding: 0 0.75rem;
+    }
+
+    .app-main {
+        padding: 1rem 0.75rem;
+    }
+}
+
+/* Utility: ensure container-fluid inside main doesn't add excessive max-width */
+.app-main .container-fluid {
+    padding: 0;
+    max-width: 100%;
+}
+
+/* NAVEGACIÓN SIDEBAR */
+.nav {
+    list-style: none;
+}
+
+    .nav li {
+        margin-bottom: 0.5rem;
+    }
+
+    .nav a {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: #475569;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background 0.2s;
+    }
+
+        .nav a:hover,
+        .nav a.active {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+/* GRID DE CARDS - auto-fit sin media queries */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Card con subgrid para alinear elementos */
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.card-description {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.card-action {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+    align-self: start;
+}
+
+    .card-action:hover {
+        background: #1d4ed8;
+    }
+
+/* STATS con auto-fill para mantener tamaño consistente */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1e293b;
+}
+
+.result-grid {
+    display: flex;
+    flex-wrap: wrap;
+    /*grid-template-columns: repeat(auto-fit, auto);*/
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.vertical-separator {
+    border: 1px solid #ccc;
+    height: 70%;
+    min-height: 3em;
+}
+
+.box_shadow {
+    box-shadow: 0 2px 6px rgb(0 0 0 / .15);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.box_border {
+    padding: .3em .5em;
+    border: 1px solid #0e0e5a;
+    border-radius: .25em;
+}
+
+.result {
+    background-color: #fff;
+    cursor: context-menu;
+    display: flex;
+    gap: .5em;
+    align-items: center;
+}
+
+    .result .summary_icon {
+        font-size: 1.8em;
+        min-width: max-content;
+    }
+
+    .result .summary_data {
+        display: flex;
+        gap: .3em;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .result .summary_data label {
+            font-size: .65em;
+        }
+
+        .result .summary_data .data {
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}

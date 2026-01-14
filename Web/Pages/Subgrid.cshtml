@@ -1,0 +1,467 @@
+﻿@page
+@model SubgridModel
+@{
+    ViewData["Title"] = "Subgrid";
+}
+
+<style>
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2563eb;
+    }
+
+    .subtitle {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    code {
+        background: #f1f5f9;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #be123c;
+        font-size: 0.9rem;
+    }
+
+    /* SIN SUBGRID - Grid normal */
+    .cards-without-subgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .card-without-subgrid {
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 1rem;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* CON SUBGRID */
+    .cards-with-subgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .card-with-subgrid {
+        display: grid;
+        grid-template-rows: subgrid;
+        grid-row: span 4;
+        gap: 1rem;
+        background: white;
+        border: 2px solid #10b981;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Estilos comunes */
+    .card-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .card-description {
+        color: #64748b;
+        font-size: 0.95rem;
+    }
+
+    .card-button {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.2s;
+        align-self: start;
+    }
+
+        .card-button:hover {
+            background: #1d4ed8;
+        }
+
+    /* Visualización de filas con subgrid */
+    .card-with-subgrid .card-image {
+        grid-row: 1;
+    }
+
+    .card-with-subgrid .card-title {
+        grid-row: 2;
+    }
+
+    .card-with-subgrid .card-description {
+        grid-row: 3;
+    }
+
+    .card-with-subgrid .card-button {
+        grid-row: 4;
+        align-self: end;
+    }
+
+    /* Indicadores visuales */
+    .bad-indicator {
+        background: #fee2e2;
+        border-left: 4px solid #dc2626;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+    }
+
+    .good-indicator {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+    }
+
+    .explanation {
+        background: #f0f9ff;
+        border-left: 4px solid #0284c7;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 4px;
+    }
+
+    /* Grid lines visualization */
+    .with-grid-lines {
+        position: relative;
+    }
+
+    .grid-line-label {
+        position: absolute;
+        right: -80px;
+        background: #1e293b;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    @@media (max-width: 768px) {
+        .grid-line-label
+
+    {
+        display: none;
+    }
+
+    }
+
+    /* Code block */
+    .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        margin: 1rem 0;
+    }
+
+    .code-comment {
+        color: #94a3b8;
+    }
+
+    .code-highlight {
+        color: #fbbf24;
+        font-weight: 600;
+    }
+
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    @@media (max-width: 1024px) {
+        .comparison-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    .comparison-item {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 6px;
+    }
+</style>
+
+<div class="container">
+    <h1>🧩 Subgrid: Alineación perfecta sin JavaScript</h1>
+
+    <!-- SECCIÓN 1: EL PROBLEMA -->
+    <div class="section">
+        <h2 class="section-title">❌ Problema: SIN subgrid</h2>
+        <p class="subtitle">Cada card es independiente. Los elementos NO se alinean entre cards.</p>
+
+        <div class="bad-indicator">
+            <strong>⚠️ Observa:</strong> Los botones están a diferentes alturas. Los títulos largos empujan todo hacia abajo solo en su card.
+        </div>
+
+        <div class="cards-without-subgrid">
+            <div class="card-without-subgrid">
+                <div class="card-image">📱</div>
+                <h3 class="card-title">Título corto</h3>
+                <p class="card-description">Una descripción breve.</p>
+                <button class="card-button">Ver más</button>
+            </div>
+
+            <div class="card-without-subgrid">
+                <div class="card-image">💻</div>
+                <h3 class="card-title">Este es un título muy largo que ocupa múltiples líneas y desalinea todo</h3>
+                <p class="card-description">Esta descripción también es mucho más extensa y detallada. Contiene información adicional que hace que la card sea más alta que las demás.</p>
+                <button class="card-button">Ver más</button>
+            </div>
+
+            <div class="card-without-subgrid">
+                <div class="card-image">⌚</div>
+                <h3 class="card-title">Título medio</h3>
+                <p class="card-description">Descripción de longitud media.</p>
+                <button class="card-button">Ver más</button>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <strong>¿Qué está mal?</strong><br>
+            • Cada card tiene su propio sistema de filas INDEPENDIENTE<br>
+            • El título largo de la card 2 solo afecta A SU PROPIA card<br>
+            • Los botones están a diferentes alturas (feo y poco profesional)<br>
+            • No hay forma de alinearlos sin JavaScript o alturas fijas
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: LA SOLUCIÓN -->
+    <div class="section">
+        <h2 class="section-title">✅ Solución: CON subgrid</h2>
+        <p class="subtitle">Las cards heredan las filas del padre. TODO se alinea automáticamente.</p>
+
+        <div class="good-indicator">
+            <strong>✨ Observa:</strong> Los botones están PERFECTAMENTE alineados. Las filas se ajustan a la card más alta de cada fila.
+        </div>
+
+        <div class="cards-with-subgrid with-grid-lines">
+            <div class="card-with-subgrid">
+                <div class="card-image">📱</div>
+                <h3 class="card-title">Título corto</h3>
+                <p class="card-description">Una descripción breve.</p>
+                <button class="card-button">Ver más</button>
+            </div>
+
+            <div class="card-with-subgrid">
+                <div class="card-image">💻</div>
+                <h3 class="card-title">Este es un título muy largo que ocupa múltiples líneas y desalinea todo</h3>
+                <p class="card-description">Esta descripción también es mucho más extensa y detallada. Contiene información adicional que hace que la card sea más alta que las demás.</p>
+                <button class="card-button">Ver más</button>
+            </div>
+
+            <div class="card-with-subgrid">
+                <div class="card-image">⌚</div>
+                <h3 class="card-title">Título medio</h3>
+                <p class="card-description">Descripción de longitud media.</p>
+                <button class="card-button">Ver más</button>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <strong>¿Qué cambió?</strong><br>
+            • El grid PADRE define 4 filas compartidas por TODAS las cards<br>
+            • Fila 1: Todas las imágenes alineadas<br>
+            • Fila 2: Todos los títulos alineados (la altura es del título MÁS LARGO)<br>
+            • Fila 3: Todas las descripciones alineadas<br>
+            • Fila 4: Todos los botones alineados al final<br>
+            • <strong>¡Alineación perfecta sin JavaScript!</strong>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 3: EL CÓDIGO -->
+    <div class="section">
+        <h2 class="section-title">💻 El código explicado</h2>
+
+        <h3 style="margin-bottom: 0.5rem; color: #1e293b;">Paso 1: El grid padre (normal)</h3>
+        <div class="code-block">
+            <span class="code-comment">/* El contenedor de las cards */</span>
+            .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            <span class="code-comment">/* Nada especial aquí, es un grid normal */</span>
+            }
+        </div>
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: #1e293b;">Paso 2: Cada card usa subgrid 🔥</h3>
+        <div class="code-block">
+            .card {
+            display: grid;
+
+            <span class="code-highlight">grid-template-rows: subgrid;</span>  <span class="code-comment">/* ¡LA MAGIA! */</span>
+            <span class="code-comment">/* "No defino mis propias filas, uso las del padre" */</span>
+
+            <span class="code-highlight">grid-row: span 4;</span>  <span class="code-comment">/* Ocupo 4 filas del padre */</span>
+
+            gap: 1rem;
+            padding: 1.5rem;
+            }
+        </div>
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: #1e293b;">Paso 3: Colocar elementos en las filas</h3>
+        <div class="code-block">
+            <span class="code-comment">/* Asignar cada elemento a su fila compartida */</span>
+            .card img     { <span class="code-highlight">grid-row: 1;</span> }
+            .card h3      { <span class="code-highlight">grid-row: 2;</span> }
+            .card p       { <span class="code-highlight">grid-row: 3;</span> }
+            .card button  {
+            <span class="code-highlight">grid-row: 4;</span>
+            align-self: end;  <span class="code-comment">/* Pegar al fondo de la fila */</span>
+            }
+        </div>
+
+        <div class="explanation">
+            <strong>¿Cómo funciona internamente?</strong><br><br>
+            1. El navegador escanea TODAS las cards<br>
+            2. Para cada fila, encuentra el elemento MÁS ALTO:<br>
+            → Fila 1: La imagen más alta (todas iguales en este caso)<br>
+            → Fila 2: El título más largo (card del medio)<br>
+            → Fila 3: La descripción más larga (card del medio)<br>
+            → Fila 4: El botón (todos iguales)<br>
+            3. Todas las cards usan ESE sistema de alturas<br>
+            4. Resultado: Alineación perfecta ✨
+        </div>
+    </div>
+
+    <!-- SECCIÓN 4: COMPARACIÓN LADO A LADO -->
+    <div class="section">
+        <h2 class="section-title">⚖️ Comparación directa</h2>
+
+        <div class="comparison-grid">
+            <div class="comparison-item">
+                <h3 style="color: #dc2626; margin-bottom: 0.5rem;">❌ Sin subgrid</h3>
+                <div class="code-block">
+                    .card {
+                    display: grid;
+                    grid-template-rows: <span class="code-highlight">auto auto 1fr auto</span>;
+                    <span class="code-comment">/* Cada card define sus propias filas */</span>
+                    <span class="code-comment">/* Independientes entre sí */</span>
+                    }
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #64748b;">
+                    Cada card es un mundo. No hay coordinación entre ellas.
+                </p>
+            </div>
+
+            <div class="comparison-item">
+                <h3 style="color: #10b981; margin-bottom: 0.5rem;">✅ Con subgrid</h3>
+                <div class="code-block">
+                    .card {
+                    display: grid;
+                    grid-template-rows: <span class="code-highlight">subgrid</span>;
+                    grid-row: span 4;
+                    <span class="code-comment">/* Heredan las filas del padre */</span>
+                    <span class="code-comment">/* TODAS coordinadas */</span>
+                    }
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #64748b;">
+                    Las cards comparten el sistema de filas. Alineación automática.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 5: CUÁNDO USAR -->
+    <div class="section">
+        <h2 class="section-title">🎯 ¿Cuándo usar subgrid?</h2>
+
+        <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 6px; border-left: 4px solid #10b981;">
+                <strong style="color: #065f46;">✅ Úsalo cuando:</strong><br>
+                • Tienes una grilla de cards/items<br>
+                • Los elementos internos tienen diferentes alturas<br>
+                • Quieres que los botones/elementos se alineen entre cards<br>
+                • Necesitas diseño consistente y profesional
+            </div>
+
+            <div style="background: #fee2e2; padding: 1rem; border-radius: 6px; border-left: 4px solid #dc2626;">
+                <strong style="color: #991b1b;">❌ NO lo necesitas cuando:</strong><br>
+                • Todos los items tienen exactamente el mismo contenido/altura<br>
+                • No te importa que los elementos estén desalineados<br>
+                • Solo tienes 1 columna (móvil)<br>
+                • Los elementos son puramente visuales (imágenes solas)
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 6: SOPORTE -->
+    <div class="section">
+        <h2 class="section-title">🌐 Soporte de navegadores</h2>
+
+        <div class="explanation">
+            <strong>Soporte actual:</strong><br>
+            ✅ Chrome/Edge 117+ (Septiembre 2023)<br>
+            ✅ Firefox 71+ (Diciembre 2019)<br>
+            ✅ Safari 16+ (Septiembre 2022)<br><br>
+
+            <strong>Fallback:</strong> Si necesitas soportar navegadores antiguos, puedes usar <code>@@supports</code>:<br><br>
+
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <span class="code-comment">/* Fallback: grid normal */</span>
+                .card {
+                display: grid;
+                grid-template-rows: auto auto 1fr auto;
+                }
+
+                <span class="code-comment">/* Si soporta subgrid, usar subgrid */</span>
+                @@supports (grid-template-rows: subgrid) {
+                .card {
+                grid-template-rows: subgrid;
+                grid-row: span 4;
+                }
+                }
+            </div>
+        </div>
+    </div>
+
+</div>

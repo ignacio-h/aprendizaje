@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
+</head>
+<body class="app-grid">
+    <header class="app-header">
+        <h1>Aprendizaje</h1>
+        <span>Usuario: Nacho</span>
+    </header>
+
+    <aside class="app-sidebar">
+        <nav aria-label="Primary">
+            <ul class="nav">
+                <li>
+                    <a asp-area="" asp-page="/Index">Home</a>
+                </li>
+                <li>
+                    <a asp-area="" asp-page="/AutoFitFill">AutoFit-Fill Test</a>
+                </li>
+                <li>
+                    <a asp-area="" asp-page="/Subgrid">Subgrid Test</a>
+                </li>
+                <li>
+                    <a asp-area="" asp-page="/Gallery">Gallery</a>
+                </li>
+                <li>
+                    <a asp-area="" asp-page="/ContainerQuery">ContainerQuery</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="app-main" role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="app-footer border-top text-muted">
+        <p>
+            &copy; @DateTime.Now.Year - Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </p>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

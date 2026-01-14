@@ -1,0 +1,287 @@
+﻿@page
+@model AutoFitFillModel
+@{
+    ViewData["Title"] = "AutoFitFill";
+}
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #2563eb;
+    }
+
+    .section-subtitle {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    code {
+        background: #f1f5f9;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #be123c;
+    }
+
+    /* GRID CON AUTO-FIT */
+    .grid-autofit {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    /* GRID CON AUTO-FILL */
+    .grid-autofill {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .item {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 1rem;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: 600;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .explanation {
+        background: #f0f9ff;
+        border-left: 4px solid #0284c7;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 4px;
+    }
+
+    .key-difference {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .controls {
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .width-display {
+        background: #1e293b;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    /* Visualización de columnas vacías */
+    .grid-with-visualization {
+        position: relative;
+        background: repeating-linear-gradient( 90deg, transparent, transparent calc(150px + 1rem), rgba(220, 38, 38, 0.1) calc(150px + 1rem), rgba(220, 38, 38, 0.1) calc(150px + 1rem + 2px) );
+        padding: 1rem;
+        border-radius: 6px;
+    }
+
+    .resize-container {
+        resize: horizontal;
+        overflow: auto;
+        border: 2px dashed #cbd5e1;
+        padding: 1rem;
+        min-width: 300px;
+        max-width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .resize-hint {
+        text-align: center;
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        font-style: italic;
+    }
+
+    /* Demostración con pocos items */
+    .demo-few-items .item {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+</style>
+
+<div class="container">
+    <h1>🔄 auto-fit vs auto-fill: Entendiendo la diferencia</h1>
+
+    <!-- SECCIÓN 1: AUTO-FIT -->
+    <div class="section">
+        <h2 class="section-title">1️⃣ auto-fit (Colapsa columnas vacías)</h2>
+        <p class="section-subtitle">
+            <code>grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));</code>
+        </p>
+
+        <div class="resize-hint">👆 Arrastra la esquina inferior derecha para redimensionar</div>
+
+        <div class="resize-container">
+            <div class="grid-autofit">
+                <div class="item">Item 1</div>
+                <div class="item">Item 2</div>
+                <div class="item">Item 3</div>
+                <div class="item">Item 4</div>
+                <div class="item">Item 5</div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <strong>Comportamiento:</strong><br>
+            • Crea columnas solo para los items que existen<br>
+            • Las columnas vacías <strong>se colapsan (desaparecen)</strong><br>
+            • Los items se expanden para llenar TODO el espacio disponible<br>
+            • Cada item crece más allá de 150px si hay espacio
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: AUTO-FILL -->
+    <div class="section">
+        <h2 class="section-title">2️⃣ auto-fill (Mantiene columnas vacías)</h2>
+        <p class="section-subtitle">
+            <code>grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));</code>
+        </p>
+
+        <div class="resize-hint">👆 Arrastra la esquina inferior derecha para redimensionar</div>
+
+        <div class="resize-container">
+            <div class="grid-autofill">
+                <div class="item">Item 1</div>
+                <div class="item">Item 2</div>
+                <div class="item">Item 3</div>
+                <div class="item">Item 4</div>
+                <div class="item">Item 5</div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <strong>Comportamiento:</strong><br>
+            • Crea TODAS las columnas que caben (incluso si están vacías)<br>
+            • Las columnas vacías <strong>se mantienen (columnas fantasma)</strong><br>
+            • Los items NO se expanden tanto<br>
+            • Cada item se mantiene más cerca de 150px
+        </div>
+    </div>
+
+    <!-- SECCIÓN 3: COMPARACIÓN DIRECTA -->
+    <div class="section">
+        <h2 class="section-title">3️⃣ Comparación lado a lado (SOLO 2 items)</h2>
+        <p class="section-subtitle">Aquí se ve claramente la diferencia</p>
+
+        <div class="key-difference">
+            <strong>⚠️ LA CLAVE:</strong> Con pocos items y mucho espacio, <code>auto-fit</code> expande los items, mientras <code>auto-fill</code> los mantiene pequeños dejando espacio vacío.
+        </div>
+
+        <h3 style="margin-top: 1.5rem; color: #2563eb;">auto-fit (items se expanden):</h3>
+        <div class="demo-few-items">
+            <div class="grid-autofit">
+                <div class="item">Item 1<br><small>(Se expande)</small></div>
+                <div class="item">Item 2<br><small>(Se expande)</small></div>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 1.5rem; color: #2563eb;">auto-fill (items mantienen tamaño):</h3>
+        <div class="demo-few-items">
+            <div class="grid-autofill">
+                <div class="item">Item 1<br><small>(Tamaño fijo)</small></div>
+                <div class="item">Item 2<br><small>(Tamaño fijo)</small></div>
+            </div>
+        </div>
+
+        <div class="explanation" style="margin-top: 1rem;">
+            <strong>¿Lo ves?</strong><br>
+            • Con <code>auto-fit</code>: Los 2 items ocupan TODO el ancho (50% cada uno)<br>
+            • Con <code>auto-fill</code>: Los 2 items mantienen su tamaño mínimo (~150px) y dejan espacio vacío a la derecha
+        </div>
+    </div>
+
+    <!-- SECCIÓN 4: CUÁNDO USAR CADA UNO -->
+    <div class="section">
+        <h2 class="section-title">4️⃣ ¿Cuándo usar cada uno?</h2>
+
+        <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+            <div style="background: #dcfce7; padding: 1rem; border-radius: 6px; border-left: 4px solid #16a34a;">
+                <strong style="color: #166534;">✅ Usa auto-fit cuando:</strong><br>
+                • Quieres que los items se expandan para llenar el espacio<br>
+                • Estás haciendo una galería de imágenes<br>
+                • Quieres cards que crezcan en pantallas grandes<br>
+                • Tu prioridad es aprovechar TODO el espacio
+            </div>
+
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                <strong style="color: #92400e;">⚠️ Usa auto-fill cuando:</strong><br>
+                • Quieres mantener tamaños consistentes<br>
+                • Estás haciendo una grilla de íconos o avatares<br>
+                • El diseño requiere elementos del mismo tamaño<br>
+                • No quieres que los items crezcan demasiado
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 5: FÓRMULA MATEMÁTICA -->
+    <div class="section">
+        <h2 class="section-title">5️⃣ La fórmula para calcular los breakpoints</h2>
+
+        <div style="background: #1e293b; color: white; padding: 1.5rem; border-radius: 6px; font-family: 'Courier New', monospace; margin: 1rem 0;">
+            Breakpoint = (N × minWidth) + ((N - 1) × gap)
+        </div>
+
+        <div class="explanation">
+            <strong>Ejemplo con minmax(280px, 1fr) y gap de 24px:</strong><br><br>
+
+            <strong>4 → 3 columnas:</strong><br>
+            (4 × 280px) + (3 × 24px) = 1192px<br>
+            <em>Si el contenedor mide menos de 1192px, pasa de 4 a 3 columnas</em><br><br>
+
+            <strong>3 → 2 columnas:</strong><br>
+            (3 × 280px) + (2 × 24px) = 888px<br><br>
+
+            <strong>2 → 1 columna:</strong><br>
+            (2 × 280px) + (1 × 24px) = 584px
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Este script es solo para mejorar la experiencia, no es necesario para el funcionamiento del Grid
+    const resizeContainers = document.querySelectorAll('.resize-container');
+
+    resizeContainers.forEach(container => {
+      const observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          const width = Math.round(entry.contentRect.width);
+          console.log('Container width:', width);
+        }
+      });
+      observer.observe(container);
+    });
+</script>

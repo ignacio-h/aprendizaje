@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CSS Grid Moderno</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* LAYOUT PRINCIPAL CON GRID AREAS */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            grid-template-rows: 60px 1fr 40px;
+            grid-template-areas:
+                "header  header"
+                "sidebar main"
+                "footer  footer";
+            min-height: 100vh;
+            gap: 0;
+        }
+
+        /* Responsive: Solo 1 media query para cambiar el layout */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "header"
+                    "main"
+                    "footer";
+            }
+
+            .sidebar {
+                display: none; /* En producción usarías un toggle con JS mínimo */
+            }
+        }
+
+        /* COMPONENTES */
+        .header {
+            grid-area: header;
+            background: #2563eb;
+            color: white;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sidebar {
+            grid-area: sidebar;
+            background: #f8fafc;
+            padding: 1.5rem 1rem;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .main {
+            grid-area: main;
+            padding: 2rem;
+            background: #ffffff;
+            overflow-y: auto;
+        }
+
+        .footer {
+            grid-area: footer;
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* GRID DE CARDS - auto-fit sin media queries */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Card con subgrid para alinear elementos */
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+            .card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .card-description {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .card-action {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+            align-self: start;
+        }
+
+            .card-action:hover {
+                background: #1d4ed8;
+            }
+
+        /* NAVEGACIÓN SIDEBAR */
+        .nav {
+            list-style: none;
+        }
+
+            .nav li {
+                margin-bottom: 0.5rem;
+            }
+
+            .nav a {
+                display: block;
+                padding: 0.75rem 1rem;
+                color: #475569;
+                text-decoration: none;
+                border-radius: 6px;
+                transition: background 0.2s;
+            }
+
+                .nav a:hover,
+                .nav a.active {
+                    background: #e2e8f0;
+                    color: #1e293b;
+                }
+
+        /* STATS con auto-fill para mantener tamaño consistente */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header class="header">
+            <h1>Mi Dashboard</h1>
+            <span>Usuario Admin</span>
+        </header>
+
+        <aside class="sidebar">
+            <nav>
+                <ul class="nav">
+                    <li><a href="#" class="active">📊 Dashboard</a></li>
+                    <li><a href="#">📦 Productos</a></li>
+                    <li><a href="#">👥 Usuarios</a></li>
+                    <li><a href="#">📈 Reportes</a></li>
+                    <li><a href="#">⚙️ Configuración</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <h2 class="section-title">Estadísticas</h2>
+
+            <!-- Stats con auto-fill: mantiene tamaño consistente -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value">1,234</div>
+                    <div class="stat-label">Usuarios Activos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">567</div>
+                    <div class="stat-label">Ventas Hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">89%</div>
+                    <div class="stat-label">Satisfacción</div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Acciones Rápidas</h2>
+
+            <!-- Cards con auto-fit: se adaptan automáticamente sin media queries -->
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <h3 class="card-title">Crear Producto</h3>
+                    <p class="card-description">Añade un nuevo producto al catálogo con todos sus detalles y configuración.</p>
+                    <button class="card-action">Crear</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">👤</div>
+                    <h3 class="card-title">Nuevo Usuario</h3>
+                    <p class="card-description">Registra un nuevo usuario en el sistema.</p>
+                    <button class="card-action">Registrar</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">Ver Reportes</h3>
+                    <p class="card-description">Accede a los reportes detallados de ventas, inventario y análisis de tendencias del último trimestre.</p>
+                    <button class="card-action">Acceder</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">⚙️</div>
+                    <h3 class="card-title">Configuración</h3>
+                    <p class="card-description">Ajusta las preferencias del sistema.</p>
+                    <button class="card-action">Configurar</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔔</div>
+                    <h3 class="card-title">Notificaciones</h3>
+                    <p class="card-description">Gestiona las notificaciones y alertas del sistema para mantenerte informado de eventos importantes.</p>
+                    <button class="card-action">Gestionar</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📧</div>
+                    <h3 class="card-title">Enviar Email</h3>
+                    <p class="card-description">Envía correos a tus usuarios.</p>
+                    <button class="card-action">Enviar</button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Mi Empresa - Dashboard Moderno con CSS Grid</p>
+        </footer>
+    </div>
+</body>
+</html>

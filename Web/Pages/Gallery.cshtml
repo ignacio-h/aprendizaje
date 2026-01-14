@@ -1,0 +1,608 @@
+﻿@page
+@model GalleryModel
+@{
+    ViewData["Title"] = "Gallery";
+}
+
+
+<style>
+    .container {
+        /* max-width: 1400px; */
+        margin: 0 auto;
+    }
+
+    .section {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2563eb;
+    }
+
+    .subtitle {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    code {
+        background: #f1f5f9;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #be123c;
+        font-size: 0.9rem;
+    }
+
+    .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        margin: 1rem 0;
+    }
+
+    .code-comment {
+        color: #94a3b8;
+    }
+
+    .code-highlight {
+        color: #fbbf24;
+        font-weight: 600;
+    }
+
+    .explanation {
+        background: #f0f9ff;
+        border-left: 4px solid #0284c7;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 4px;
+    }
+
+    /* ============================================
+           OPCIÓN A: GALERÍA TIPO PINTEREST/MASONRY
+           ============================================ */
+    .masonry-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-auto-rows: 10px; /* Filas pequeñas para control granular */
+        gap: 1rem;
+    }
+
+    .masonry-item {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        /* Altura dinámica usando CSS custom properties */
+        grid-row: span var(--span);
+    }
+
+        .masonry-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+    .masonry-item-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .masonry-item-content {
+        padding: 1rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .masonry-item-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+    }
+
+    .masonry-item-description {
+        color: #64748b;
+        font-size: 0.9rem;
+        flex-grow: 1;
+    }
+
+    .masonry-item-tag {
+        display: inline-block;
+        background: #e0e7ff;
+        color: #3730a3;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin-top: 0.5rem;
+    }
+
+    /* ============================================
+           OPCIÓN B: BLOG GRID CON FEATURED POSTS
+           ============================================ */
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-auto-rows: 250px;
+        gap: 1.5rem;
+        grid-auto-flow: dense; /* Rellena huecos automáticamente */
+    }
+
+    .blog-item {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: grid;
+        grid-template-rows: 1fr auto;
+    }
+
+        .blog-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .blog-item.featured {
+            grid-column: span 2;
+            grid-row: span 2;
+            grid-template-rows: 2fr 1fr;
+        }
+
+    .blog-item-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+    }
+
+    .blog-item.featured .blog-item-image {
+        font-size: 5rem;
+    }
+
+    .blog-item-content {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .blog-item-category {
+        color: #2563eb;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .blog-item-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+        line-height: 1.4;
+    }
+
+    .blog-item.featured .blog-item-title {
+        font-size: 1.5rem;
+    }
+
+    .blog-item-meta {
+        display: flex;
+        gap: 1rem;
+        color: #64748b;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+    }
+
+    /* ============================================
+           OPCIÓN C: GALERÍA CON GRID-AUTO-FLOW DENSE
+           ============================================ */
+    .dense-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-auto-rows: 200px;
+        gap: 1rem;
+        grid-auto-flow: dense; /* 🔥 Rellena huecos automáticamente */
+    }
+
+    .dense-item {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: white;
+        transition: transform 0.3s;
+    }
+
+        .dense-item:hover {
+            transform: scale(1.05);
+        }
+
+        .dense-item.wide {
+            grid-column: span 2;
+        }
+
+        .dense-item.tall {
+            grid-row: span 2;
+        }
+
+        .dense-item.large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        /* Colores variados para visualización */
+        .dense-item:nth-child(6n+1) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .dense-item:nth-child(6n+2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .dense-item:nth-child(6n+3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .dense-item:nth-child(6n+4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .dense-item:nth-child(6n+5) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .dense-item:nth-child(6n+6) {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+    .key-feature {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="container">
+    <h1>🎨 Día 3: Galerías Avanzadas con CSS Grid</h1>
+
+    <!-- ============================================
+         OPCIÓN A: GALERÍA TIPO PINTEREST/MASONRY
+         ============================================ -->
+    <div class="section">
+        <h2 class="section-title">📌 Opción A: Galería tipo Pinterest/Masonry</h2>
+        <p class="subtitle">Items de diferentes alturas que se acomodan sin dejar huecos grandes</p>
+
+        <div class="code-block">
+            .masonry-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            <span class="code-highlight">grid-auto-rows: 10px;</span>  <span class="code-comment">/* 🔥 Filas pequeñas = control granular */</span>
+            gap: 1rem;
+            }
+
+            .masonry-item {
+            <span class="code-highlight">grid-row: span var(--span);</span>  <span class="code-comment">/* Altura dinámica */</span>
+            }
+        </div>
+
+        <div class="key-feature">
+            <strong>🔑 La clave:</strong> Filas de 10px te dan "resolución alta" para las alturas.<br>
+            • <code>span 20</code> = 200px de alto<br>
+            • <code>span 35</code> = 350px de alto<br>
+            • <code>span 50</code> = 500px de alto
+        </div>
+
+        <div class="masonry-gallery">
+            <div class="masonry-item" style="--span: 25;">
+                <div class="masonry-item-content">
+                    <div class="masonry-item-title">Proyecto A</div>
+                    <div class="masonry-item-description">Una descripción corta.</div>
+                    <span class="masonry-item-tag">Diseño</span>
+                </div>
+            </div>
+
+            <div class="masonry-item" style="--span: 40;">
+                <div class="masonry-item-content">
+                    <div class="masonry-item-title">Proyecto B</div>
+                    <div class="masonry-item-description">
+                        Esta descripción es mucho más larga y detallada.
+                        Contiene información adicional sobre el proyecto que ocupa más espacio vertical.
+                    </div>
+                    <span class="masonry-item-tag">Desarrollo</span>
+                </div>
+            </div>
+
+            <div class="masonry-item" style="--span: 30;">
+                <div class="masonry-item-content">
+                    <div class="masonry-item-title">Proyecto C</div>
+                    <div class="masonry-item-description">Descripción mediana del proyecto.</div>
+                    <span class="masonry-item-tag">Marketing</span>
+                </div>
+            </div>
+
+            <div class="masonry-item" style="--span: 45;">
+                <div class="masonry-item-content">
+                    <div class="masonry-item-title">Proyecto D</div>
+                    <div class="masonry-item-description">
+                        Otra descripción extensa que necesita más espacio.
+                        Perfecta para proyectos con más detalles.
+                    </div>
+                    <span class="masonry-item-tag">Consultoría</span>
+                </div>
+            </div>
+
+            <div class="masonry-item" style="--span: 28;">
+                <div class="masonry-item-content">
+                    <div class="masonry-item-title">Proyecto E</div>
+                    <div class="masonry-item-description">Descripción breve y concisa.</div>
+                    <span class="masonry-item-tag">UX/UI</span>
+                </div>
+            </div>
+
+            <div class="masonry-item" style="--span: 38;">
+                <div class="masonry-item-content">
+                    <div class="masonry-item-title">Proyecto F</div>
+                    <div class="masonry-item-description">
+                        Un proyecto intermedio con descripción de longitud media.
+                    </div>
+                    <span class="masonry-item-tag">Innovación</span>
+                </div>
+            </div>
+
+            <div class="masonry-item" style="--span: 32;">
+                <div class="masonry-item-content">
+                    <div class="masonry-item-title">Proyecto G</div>
+                    <div class="masonry-item-description">Descripción estándar para este tipo de proyecto.</div>
+                    <span class="masonry-item-tag">Estrategia</span>
+                </div>
+            </div>
+
+            <div class="masonry-item" style="--span: 42;">
+                <div class="masonry-item-content">
+                    <div class="masonry-item-title">Proyecto H</div>
+                    <div class="masonry-item-description">
+                        Proyecto complejo que requiere una explicación más detallada y extensa.
+                    </div>
+                    <span class="masonry-item-tag">Tecnología</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <strong>Uso práctico:</strong><br>
+            • Portfolio de diseño/fotografía<br>
+            • Galería de productos con descripciones variables<br>
+            • Feed de contenido tipo Pinterest<br>
+            • Colección de proyectos o trabajos<br><br>
+
+            <strong>En producción:</strong> Calcularías el <code>--span</code> con JavaScript basado en la altura real del contenido, o definirías clases como <code>.small</code>, <code>.medium</code>, <code>.large</code>.
+        </div>
+    </div>
+
+    <!-- ============================================
+         OPCIÓN B: BLOG GRID CON FEATURED POSTS
+         ============================================ -->
+    <div class="section">
+        <h2 class="section-title">📰 Opción B: Blog Grid con Featured Posts</h2>
+        <p class="subtitle">Posts normales + algunos destacados que ocupan más espacio</p>
+
+        <div class="code-block">
+            .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-auto-rows: 250px;
+            gap: 1.5rem;
+            }
+
+            .blog-item {
+            <span class="code-comment">/* Item normal: 1 celda */</span>
+            }
+
+            .blog-item.featured {
+            <span class="code-highlight">grid-column: span 2;</span>  <span class="code-comment">/* Ocupa 2 columnas */</span>
+            <span class="code-highlight">grid-row: span 2;</span>     <span class="code-comment">/* Ocupa 2 filas */</span>
+            }
+        </div>
+
+        <div class="blog-grid">
+            <div class="blog-item featured">
+                <div class="blog-item-image">🔥</div>
+                <div class="blog-item-content">
+                    <div class="blog-item-category">Destacado</div>
+                    <h3 class="blog-item-title">Artículo Principal: Las nuevas tendencias en desarrollo web</h3>
+                    <div class="blog-item-meta">
+                        <span>📅 Hace 2 horas</span>
+                        <span>👁 1.2k vistas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-item-image">📱</div>
+                <div class="blog-item-content">
+                    <div class="blog-item-category">Tecnología</div>
+                    <h3 class="blog-item-title">Optimización de aplicaciones móviles</h3>
+                    <div class="blog-item-meta">
+                        <span>📅 Ayer</span>
+                        <span>👁 450 vistas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-item-image">💻</div>
+                <div class="blog-item-content">
+                    <div class="blog-item-category">Desarrollo</div>
+                    <h3 class="blog-item-title">Clean Code en C#</h3>
+                    <div class="blog-item-meta">
+                        <span>📅 Hace 2 días</span>
+                        <span>👁 890 vistas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-item-image">🎨</div>
+                <div class="blog-item-content">
+                    <div class="blog-item-category">Diseño</div>
+                    <h3 class="blog-item-title">Principios de UI moderna</h3>
+                    <div class="blog-item-meta">
+                        <span>📅 Hace 3 días</span>
+                        <span>👁 670 vistas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-item featured">
+                <div class="blog-item-image">⚡</div>
+                <div class="blog-item-content">
+                    <div class="blog-item-category">Tutorial</div>
+                    <h3 class="blog-item-title">Guía completa de CSS Grid: De cero a experto</h3>
+                    <div class="blog-item-meta">
+                        <span>📅 Hace 1 semana</span>
+                        <span>👁 3.5k vistas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-item-image">🚀</div>
+                <div class="blog-item-content">
+                    <div class="blog-item-category">DevOps</div>
+                    <h3 class="blog-item-title">CI/CD con GitHub Actions</h3>
+                    <div class="blog-item-meta">
+                        <span>📅 Hace 1 semana</span>
+                        <span>👁 520 vistas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-item-image">🔐</div>
+                <div class="blog-item-content">
+                    <div class="blog-item-category">Seguridad</div>
+                    <h3 class="blog-item-title">Autenticación JWT en .NET</h3>
+                    <div class="blog-item-meta">
+                        <span>📅 Hace 2 semanas</span>
+                        <span>👁 780 vistas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <strong>Uso práctico:</strong><br>
+            • Blog o sitio de noticias<br>
+            • Página de artículos con destacados<br>
+            • Feed de contenido con promociones especiales<br>
+            • Dashboard de eventos (algunos más importantes que otros)
+        </div>
+    </div>
+
+    <!-- ============================================
+         OPCIÓN C: GRID CON AUTO-FLOW DENSE
+         ============================================ -->
+    <div class="section">
+        <h2 class="section-title">🧩 Opción C: grid-auto-flow: dense</h2>
+        <p class="subtitle">Rellena automáticamente los huecos que quedan</p>
+
+        <div class="code-block">
+            .dense-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-auto-rows: 200px;
+            gap: 1rem;
+            <span class="code-highlight">grid-auto-flow: dense;</span>  <span class="code-comment">/* 🔥 Rellena huecos */</span>
+            }
+
+            .dense-item.wide  { grid-column: span 2; }
+            .dense-item.tall  { grid-row: span 2; }
+            .dense-item.large { grid-column: span 2; grid-row: span 2; }
+        </div>
+
+        <div class="key-feature">
+            <strong>🔑 grid-auto-flow: dense;</strong><br>
+            Sin <code>dense</code>: Los items se colocan en orden, dejando huecos si no caben.<br>
+            Con <code>dense</code>: El navegador intenta rellenar esos huecos con items posteriores.
+        </div>
+
+        <div class="dense-gallery">
+            <div class="dense-item">1</div>
+            <div class="dense-item wide">2 (wide)</div>
+            <div class="dense-item">3</div>
+            <div class="dense-item tall">4 (tall)</div>
+            <div class="dense-item">5</div>
+            <div class="dense-item large">6 (large)</div>
+            <div class="dense-item">7</div>
+            <div class="dense-item">8</div>
+            <div class="dense-item wide">9 (wide)</div>
+            <div class="dense-item">10</div>
+            <div class="dense-item tall">11 (tall)</div>
+            <div class="dense-item">12</div>
+            <div class="dense-item">13</div>
+            <div class="dense-item wide">14 (wide)</div>
+            <div class="dense-item">15</div>
+        </div>
+
+        <div class="explanation">
+            <strong>Uso práctico:</strong><br>
+            • Dashboard con widgets de diferentes tamaños<br>
+            • Galería de imágenes mixtas<br>
+            • Grid de productos con promociones destacadas<br><br>
+
+            <strong>⚠️ Advertencia:</strong> <code>dense</code> puede alterar el orden visual de los items (no sigue el orden del HTML estrictamente), así que úsalo solo cuando el orden no sea crítico.
+        </div>
+    </div>
+
+    <!-- RESUMEN FINAL -->
+    <div class="section">
+        <h2 class="section-title">🎯 ¿Cuál elegir para tu proyecto?</h2>
+
+        <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 6px; border-left: 4px solid #10b981;">
+                <strong style="color: #065f46;">Opción A (Masonry):</strong><br>
+                Si tus items tienen contenido de longitud muy variable y quieres que se acomoden orgánicamente.
+            </div>
+
+            <div style="background: #dbeafe; padding: 1rem; border-radius: 6px; border-left: 4px solid #2563eb;">
+                <strong style="color: #1e40af;">Opción B (Featured):</strong><br>
+                Si tienes contenido normal + algunos items especiales que quieres destacar visualmente.
+            </div>
+
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                <strong style="color: #92400e;">Opción C (Dense):</strong><br>
+                Si tienes items de tamaños mixtos y quieres el layout más compacto posible sin huecos.
+            </div>
+        </div>
+    </div>
+
+</div>
