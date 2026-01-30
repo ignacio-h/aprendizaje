@@ -1,0 +1,563 @@
+﻿@page
+@{
+    ViewData["Title"] = "CQ Deep";
+}
+
+
+<style>
+    .container-page {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        margin-bottom: 2rem;
+        color: #1e293b;
+    }
+
+    .section {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2563eb;
+    }
+
+    .subtitle {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+    }
+
+    code {
+        background: #f1f5f9;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #be123c;
+        font-size: 0.9rem;
+    }
+
+    .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        margin: 1rem 0;
+    }
+
+    .code-comment {
+        color: #94a3b8;
+    }
+
+    .code-highlight {
+        color: #fbbf24;
+        font-weight: 600;
+    }
+
+    .warning-box {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .info-box {
+        background: #f0f9ff;
+        border-left: 4px solid #0284c7;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    /* Demo containers */
+    .demo-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    @@media (max-width: 768px) {
+        .demo-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    .demo-wrapper {
+        border: 2px dashed #cbd5e1;
+        padding: 1rem;
+        border-radius: 8px;
+        background: #f8fafc;
+    }
+
+    .demo-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    /* Container con inline-size */
+    .container-inline {
+        container-type: inline-size;
+        container-name: inline-demo;
+        background: white;
+        border: 2px solid #2563eb;
+        border-radius: 8px;
+        padding: 1rem;
+        min-height: 300px;
+        resize: both;
+        overflow: auto;
+    }
+
+    /* Container con size */
+    .container-size {
+        container-type: size;
+        container-name: size-demo;
+        background: white;
+        border: 2px solid #f59e0b;
+        border-radius: 8px;
+        padding: 1rem;
+        height: 300px;
+        resize: both;
+        overflow: auto;
+    }
+
+    /* Contenido adaptativo para inline-size */
+    .adaptive-content-inline {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    @@container inline-demo (max-width: 400px) {
+        .adaptive-content-inline
+
+    {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .adaptive-content-inline::before {
+        content: "📱 Modo estrecho (< 400px)";
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    }
+
+    @@container inline-demo (min-width: 401px) {
+        .adaptive-content-inline::before
+
+    {
+        content: "💻 Modo ancho (> 400px)";
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    }
+
+    /* Contenido adaptativo para size */
+    .adaptive-content-size {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 6px;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    @@container size-demo (max-height: 200px) {
+        .adaptive-content-size
+
+    {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .adaptive-content-size::before {
+        content: "⬇️ Bajo (< 200px altura)";
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    }
+
+    @@container size-demo (min-height: 201px) {
+        .adaptive-content-size::before
+
+    {
+        content: "⬆️ Alto (> 200px altura)";
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    }
+
+    /* Resize hint */
+    .resize-hint {
+        text-align: center;
+        color: #64748b;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        font-style: italic;
+    }
+
+    /* Tabla comparativa */
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+    }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8fafc;
+        }
+
+    .emoji-check {
+        color: #10b981;
+        font-size: 1.2rem;
+    }
+
+    .emoji-cross {
+        color: #dc2626;
+        font-size: 1.2rem;
+    }
+
+    /* Problem demo */
+    .problem-demo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .container-size-problem {
+        container-type: size;
+        background: white;
+        border: 2px solid #dc2626;
+        border-radius: 8px;
+        padding: 1rem;
+        height: 300px;
+    }
+
+    .child-with-height {
+        background: #fee2e2;
+        border: 2px dashed #dc2626;
+        padding: 1rem;
+        height: 100%;
+        border-radius: 6px;
+    }
+
+    .child-auto-height {
+        background: #fef3c7;
+        border: 2px dashed #f59e0b;
+        padding: 1rem;
+        border-radius: 6px;
+        margin-top: 1rem;
+    }
+</style>
+
+<div class="container-page">
+    <h1>🔬 Container Types: Profundizando</h1>
+
+    <!-- SECCIÓN 1: COMPARACIÓN VISUAL -->
+    <div class="section">
+        <h2 class="section-title">👀 inline-size vs size</h2>
+        <p class="subtitle">Arrastra las esquinas de cada contenedor para ver cómo reaccionan</p>
+
+        <div class="demo-grid">
+            <div class="demo-wrapper">
+                <div class="demo-label">container-type: inline-size (solo ancho)</div>
+                <div class="container-inline">
+                    <div class="adaptive-content-inline">
+                        <p>Cambia según el ANCHO del contenedor</p>
+                        <p style="margin-top: 0.5rem; opacity: 0.9; font-size: 0.9rem;">
+                            Arrastra horizontalmente para ver el cambio
+                        </p>
+                    </div>
+                </div>
+                <p class="resize-hint">👆 Arrastra la esquina inferior derecha</p>
+            </div>
+
+            <div class="demo-wrapper">
+                <div class="demo-label">container-type: size (ancho y alto)</div>
+                <div class="container-size">
+                    <div class="adaptive-content-size">
+                        <p>Cambia según el ALTO del contenedor</p>
+                        <p style="margin-top: 0.5rem; opacity: 0.9; font-size: 0.9rem;">
+                            Arrastra verticalmente para ver el cambio
+                        </p>
+                    </div>
+                </div>
+                <p class="resize-hint">👆 Arrastra la esquina inferior derecha</p>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>🔍 Observa:</strong><br>
+            • <code>inline-size</code>: Cambia de color cuando cambias el ANCHO<br>
+            • <code>size</code>: Cambia de color cuando cambias el ALTO
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: EL CÓDIGO -->
+    <div class="section">
+        <h2 class="section-title">💻 El código de cada tipo</h2>
+
+        <h3 style="margin-bottom: 0.5rem; color: #2563eb;">inline-size (Recomendado)</h3>
+        <div class="code-block">
+            <span class="code-comment">/* 1. Definir el contenedor */</span>
+            .container {
+            <span class="code-highlight">container-type: inline-size;</span>  <span class="code-comment">/* Solo monitorea el ancho */</span>
+            container-name: my-container;
+            }
+
+            <span class="code-comment">/* 2. Query basada en el ANCHO */</span>
+            @@container my-container <span class="code-highlight">(max-width: 400px)</span> {
+            .card {
+            flex-direction: column;
+            }
+            }
+        </div>
+
+        <h3 style="margin: 1.5rem 0 0.5rem; color: #f59e0b;">size (Menos común)</h3>
+        <div class="code-block">
+            <span class="code-comment">/* 1. Definir el contenedor */</span>
+            .container {
+            <span class="code-highlight">container-type: size;</span>  <span class="code-comment">/* Monitorea ancho Y alto */</span>
+            container-name: my-container;
+            <span class="code-highlight">height: 300px;</span>  <span class="code-comment">/* IMPORTANTE: Necesitas altura definida */</span>
+            }
+
+            <span class="code-comment">/* 2. Query basada en ANCHO o ALTO */</span>
+            @@container my-container <span class="code-highlight">(max-height: 200px)</span> {
+            .card {
+            font-size: 0.85rem;
+            }
+            }
+
+            @@container my-container <span class="code-highlight">(max-width: 400px)</span> {
+            .card {
+            flex-direction: column;
+            }
+            }
+        </div>
+    </div>
+
+    <!-- SECCIÓN 3: PROBLEMA CON SIZE -->
+    <div class="section">
+        <h2 class="section-title">⚠️ El problema con container-type: size</h2>
+
+        <div class="warning-box">
+            <strong>Cuidado:</strong> <code>container-type: size</code> crea un nuevo contexto de formato.
+            Esto causa que los hijos con <code>height: auto</code> colapsen a 0 altura.
+        </div>
+
+        <div class="code-block">
+            <span class="code-comment">/* ❌ PROBLEMA */</span>
+            .container {
+            container-type: size;
+            <span class="code-comment">/* NO defines altura fija */</span>
+            }
+
+            .child {
+            height: auto;  <span class="code-comment">/* Se colapsa a 0! */</span>
+            }
+
+            <span class="code-comment">/* ✅ SOLUCIÓN 1: Define altura en el contenedor */</span>
+            .container {
+            container-type: size;
+            <span class="code-highlight">height: 300px;</span>  <span class="code-comment">/* Altura fija o mínima */</span>
+            }
+
+            <span class="code-comment">/* ✅ SOLUCIÓN 2: Usa height: 100% en el hijo */</span>
+            .child {
+            <span class="code-highlight">height: 100%;</span>  <span class="code-comment">/* Funciona porque el padre tiene altura */</span>
+            }
+
+            <span class="code-comment">/* ✅ SOLUCIÓN 3: Usa inline-size si solo necesitas queries de ancho */</span>
+            .container {
+            <span class="code-highlight">container-type: inline-size;</span>  <span class="code-comment">/* Evita el problema */</span>
+            }
+        </div>
+    </div>
+
+    <!-- SECCIÓN 4: TABLA COMPARATIVA -->
+    <div class="section">
+        <h2 class="section-title">⚖️ Comparación completa</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Característica</th>
+                    <th>inline-size</th>
+                    <th>size</th>
+                    <th>normal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Monitorea ancho</strong></td>
+                    <td><span class="emoji-check">✅</span></td>
+                    <td><span class="emoji-check">✅</span></td>
+                    <td><span class="emoji-cross">❌</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Monitorea alto</strong></td>
+                    <td><span class="emoji-cross">❌</span></td>
+                    <td><span class="emoji-check">✅</span></td>
+                    <td><span class="emoji-cross">❌</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Crea contexto de bloque</strong></td>
+                    <td><span class="emoji-cross">❌</span> (más eficiente)</td>
+                    <td><span class="emoji-check">✅</span> (puede causar problemas)</td>
+                    <td><span class="emoji-cross">❌</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Los hijos con height: auto funcionan</strong></td>
+                    <td><span class="emoji-check">✅</span></td>
+                    <td><span class="emoji-cross">❌</span> (se colapsan a 0)</td>
+                    <td><span class="emoji-check">✅</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Los hijos con height: 100% funcionan</strong></td>
+                    <td><span class="emoji-check">✅</span></td>
+                    <td><span class="emoji-check">✅</span></td>
+                    <td><span class="emoji-check">✅</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Rendimiento</strong></td>
+                    <td><span class="emoji-check">✅</span> Óptimo</td>
+                    <td><span class="emoji-cross">⚠️</span> Más costoso</td>
+                    <td><span class="emoji-check">✅</span> Estándar</td>
+                </tr>
+                <tr>
+                    <td><strong>Cuándo usar</strong></td>
+                    <td>95% de los casos</td>
+                    <td>Modales, casos específicos con altura variable</td>
+                    <td>Cuando no necesitas queries</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECCIÓN 5: RECOMENDACIONES -->
+    <div class="section">
+        <h2 class="section-title">💡 Reglas de oro</h2>
+
+        <div style="display: grid; gap: 1rem;">
+            <div class="success-box">
+                <strong>✅ Regla 1: Usa inline-size por defecto</strong><br>
+                Es más eficiente, evita problemas con alturas, y cubre el 95% de los casos de uso.
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Regla 2: Solo usa size si REALMENTE necesitas queries de altura</strong><br>
+                Y cuando lo hagas, asegúrate de definir una altura en el contenedor.
+            </div>
+
+            <div class="info-box">
+                <strong>📝 Regla 3: Puedes combinar ambos con diferentes contenedores</strong><br>
+                No estás limitado a usar solo uno. Diferentes componentes pueden usar diferentes tipos.
+            </div>
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem;">Ejemplo práctico combinado:</h3>
+        <div class="code-block">
+            <span class="code-comment">/* Componente card: inline-size (solo ancho) */</span>
+            .card-container {
+            container-type: inline-size;
+            container-name: card;
+            }
+
+            @@container card (max-width: 400px) {
+            .card { flex-direction: column; }
+            }
+
+            <span class="code-comment">/* Modal: size (ancho y alto) */</span>
+            .modal-container {
+            container-type: size;
+            container-name: modal;
+            height: 80vh;  <span class="code-comment">/* Altura definida */</span>
+            }
+
+            @@container modal (max-height: 400px) {
+            .modal-content { font-size: 0.9rem; }
+            }
+
+            @@container modal (max-width: 500px) {
+            .modal-actions { flex-direction: column; }
+            }
+        </div>
+    </div>
+
+    <!-- SECCIÓN 6: CASOS DE USO -->
+    <div class="section">
+        <h2 class="section-title">🎯 Casos de uso reales</h2>
+
+        <h3 style="margin-bottom: 0.5rem;">inline-size (95% de los casos)</h3>
+        <ul style="margin: 1rem 0 1rem 2rem; line-height: 2;">
+            <li>Cards de productos que aparecen en grid + sidebar</li>
+            <li>Widgets de dashboard</li>
+            <li>Componentes reutilizables en general</li>
+            <li>Formularios adaptativos</li>
+            <li>Navegación que cambia según su espacio</li>
+        </ul>
+
+        <h3 style="margin: 2rem 0 0.5rem;">size (5% de los casos)</h3>
+        <ul style="margin: 1rem 0 1rem 2rem; line-height: 2;">
+            <li>Modales que cambian su layout según altura disponible</li>
+            <li>Tooltips que se adaptan a espacio vertical</li>
+            <li>Componentes de visualización de datos que dependen de altura</li>
+            <li>Galerías fullscreen con controles adaptativos</li>
+        </ul>
+    </div>
+
+</div>
