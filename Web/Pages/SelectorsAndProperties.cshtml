@@ -1,0 +1,644 @@
+﻿@page
+@{
+    ViewData["Title"] = "Selectores Modernos CSS";
+}
+
+
+<style>
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2563eb;
+    }
+
+    .subtitle {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+    }
+
+    code {
+        background: #f1f5f9;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #be123c;
+        font-size: 0.9rem;
+    }
+
+    .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        margin: 1rem 0;
+    }
+
+    .code-comment {
+        color: #94a3b8;
+    }
+
+    .code-highlight {
+        color: #fbbf24;
+        font-weight: 600;
+    }
+
+    .success-box {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    /* ============================================
+           DEMO 1: :has() - El parent selector
+           ============================================ */
+
+    .cards-demo {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .demo-card {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+    }
+
+        /* 🔥 Si el card tiene un botón, cambiar su estilo */
+        .demo-card:has(button) {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        /* 🔥 Si el card tiene una imagen, usar grid */
+        .demo-card:has(img) {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* 🔥 Si el card tiene un checkbox marcado */
+        .demo-card:has(input[type="checkbox"]:checked) {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .demo-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .demo-card h3 {
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-card button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+            .demo-card button:hover {
+                background: #1d4ed8;
+            }
+
+        .demo-card input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+    /* ============================================
+           DEMO 2: :is() - Agrupación eficiente
+           ============================================ */
+
+    .links-demo a {
+        color: #64748b;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        display: inline-block;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    /* 🔥 Sin :is() necesitarías repetir 3 veces */
+    :is(.header-link, .nav-link, .footer-link):hover {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    :is(.header-link, .nav-link, .footer-link):active {
+        background: #dbeafe;
+    }
+
+    /* 🔥 Selectores complejos anidados */
+    :is(article, section) :is(h1, h2, h3) {
+        color: #1e293b;
+        margin-bottom: 1rem;
+    }
+
+    /* ============================================
+           DEMO 3: :where() - Especificidad 0
+           ============================================ */
+
+    .specificity-demo {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .demo-box {
+        padding: 1rem;
+        border-radius: 6px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+    }
+
+    /* :where() tiene especificidad 0, fácil de sobreescribir */
+    :where(.demo-box) {
+        background: #fef3c7;
+        border-color: #f59e0b;
+    }
+
+    /* Esta clase simple lo sobreescribe */
+    .demo-box.override {
+        background: #d1fae5;
+        border-color: #10b981;
+    }
+
+    /* Con :is() tendrías que usar !important o más especificidad */
+    :is(.demo-box-is) {
+        background: #fee2e2;
+        border-color: #dc2626;
+    }
+
+    /* Esto NO funciona porque :is() mantiene especificidad */
+    .demo-box-is.override-attempt {
+        background: #d1fae5;
+        border-color: #10b981;
+    }
+
+    /* ============================================
+           DEMO 4: :not() avanzado
+           ============================================ */
+
+    .list-demo {
+        list-style: none;
+        display: grid;
+        gap: 0.5rem;
+    }
+
+        .list-demo li {
+            padding: 1rem;
+            background: white;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+        }
+
+            /* 🔥 Excluir múltiples condiciones a la vez */
+            .list-demo li:not(.disabled, .hidden, [data-archived="true"]) {
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+                .list-demo li:not(.disabled, .hidden, [data-archived="true"]):hover {
+                    border-color: #2563eb;
+                    background: #eff6ff;
+                }
+
+            .list-demo li.disabled {
+                opacity: 0.5;
+                background: #f8fafc;
+            }
+
+            .list-demo li.hidden {
+                display: none;
+            }
+
+    /* ============================================
+           DEMO 5: Formularios inteligentes con :has()
+           ============================================ */
+
+    .smart-form {
+        display: grid;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 8px;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s;
+    }
+
+        /* 🔥 Si el formulario tiene inputs inválidos */
+        .smart-form:has(input:invalid) {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        /* 🔥 Si TODOS los inputs son válidos */
+        .smart-form:has(input:not(:placeholder-shown)):not(:has(input:invalid)) {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+    .form-group {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+        .form-group label {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+            .form-group input:invalid {
+                border-color: #dc2626;
+            }
+
+            .form-group input:valid:not(:placeholder-shown) {
+                border-color: #10b981;
+            }
+
+    /* ============================================
+           DEMO 6: Siblings con :has()
+           ============================================ */
+
+    .tabs-demo {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .tab {
+        padding: 0.75rem 1.5rem;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        color: #64748b;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+    }
+
+        .tab:hover {
+            color: #2563eb;
+        }
+
+        .tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+
+    .tab-content {
+        display: none;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 6px;
+        border: 2px solid #e2e8f0;
+    }
+
+    /* 🔥 Si el input radio está checked, mostrar su contenido */
+    .tabs-demo:has(#tab1:checked) #content1,
+    .tabs-demo:has(#tab2:checked) #content2,
+    .tabs-demo:has(#tab3:checked) #content3 {
+        display: block;
+    }
+
+    .tabs-demo input[type="radio"] {
+        display: none;
+    }
+
+    .tabs-demo label {
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        font-weight: 600;
+        color: #64748b;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+    }
+
+        .tabs-demo label:hover {
+            color: #2563eb;
+        }
+
+    /* 🔥 Estilo del label cuando su radio está checked */
+    .tabs-demo:has(#tab1:checked) label[for="tab1"],
+    .tabs-demo:has(#tab2:checked) label[for="tab2"],
+    .tabs-demo:has(#tab3:checked) label[for="tab3"] {
+        color: #2563eb;
+        border-bottom-color: #2563eb;
+    }
+
+    .highlight-box {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+</style>
+
+
+<div class="container">
+    <h1>🎨 Selectores Modernos de CSS</h1>
+
+    <!-- DEMO 1: :has() -->
+    <div class="section">
+        <h2 class="section-title">1️⃣ :has() - El "Parent Selector"</h2>
+        <p class="subtitle">Cambia el padre basándote en sus hijos. Algo que era IMPOSIBLE antes.</p>
+
+        <div class="code-block">
+            <span class="code-comment">/* Selecciona cards que tienen botón */</span>
+            .card<span class="code-highlight">:has(button)</span> {
+            border-color: blue;
+            background: lightblue;
+            }
+
+            <span class="code-comment">/* Cards con imagen: layout grid */</span>
+            .card<span class="code-highlight">:has(img)</span> {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            }
+
+            <span class="code-comment">/* Card con checkbox marcado */</span>
+            .card<span class="code-highlight">:has(input[type="checkbox"]:checked)</span> {
+            background: lightgreen;
+            }
+        </div>
+
+        <div class="highlight-box">
+            <strong>🎯 Observa:</strong><br>
+            • Las cards con botón tienen borde azul y fondo azul claro<br>
+            • Las cards con imagen usan layout de 2 columnas<br>
+            • Marca el checkbox para ver cómo cambia el card (sin JS!)
+        </div>
+
+        <div class="cards-demo">
+            <div class="demo-card">
+                <h3>Card Simple</h3>
+                <p>Este card no tiene ni botón ni imagen.</p>
+            </div>
+
+            <div class="demo-card">
+                <h3>Card con Botón</h3>
+                <p>Este card tiene un botón, así que es azul.</p>
+                <button>Acción</button>
+            </div>
+
+            <div class="demo-card">
+                <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">🖼️</div>
+                <div>
+                    <h3>Card con Imagen</h3>
+                    <p>Usa grid de 2 columnas automáticamente.</p>
+                </div>
+            </div>
+
+            <div class="demo-card">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox">
+                    <span><strong>Card con Checkbox</strong><br>Márcame para cambiar el fondo</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEMO 2: :is() -->
+    <div class="section">
+        <h2 class="section-title">2️⃣ :is() - Agrupación sin repetición</h2>
+        <p class="subtitle">Evita repetir selectores una y otra vez.</p>
+
+        <div class="code-block">
+            <span class="code-comment">/* ❌ ANTES: Repetición horrible */</span>
+            .header-link:hover,
+            .nav-link:hover,
+            .footer-link:hover {
+            color: blue;
+            }
+
+            <span class="code-comment">/* ✅ AHORA: Limpio y DRY */</span>
+            <span class="code-highlight">:is(.header-link, .nav-link, .footer-link)</span>:hover {
+            color: blue;
+            }
+        </div>
+
+        <div class="links-demo">
+            <a href="#" class="header-link">Header Link</a>
+            <a href="#" class="nav-link">Nav Link</a>
+            <a href="#" class="footer-link">Footer Link</a>
+            <p style="margin-top: 1rem; color: #64748b; font-size: 0.9rem;">
+                Pasa el mouse sobre los links. Todos comparten el mismo estilo hover sin repetir código.
+            </p>
+        </div>
+    </div>
+
+    <!-- DEMO 3: :where() vs :is() -->
+    <div class="section">
+        <h2 class="section-title">3️⃣ :where() vs :is() - Especificidad</h2>
+        <p class="subtitle">:where() tiene especificidad 0, perfecto para estilos base que quieres sobreescribir fácilmente.</p>
+
+        <div class="code-block">
+            <span class="code-comment">/* :where() = Especificidad 0 (fácil de sobreescribir) */</span>
+            <span class="code-highlight">:where(.demo-box)</span> {
+            background: yellow;
+            }
+
+            .demo-box.override {  <span class="code-comment">/* ✅ Funciona */</span>
+            background: green;
+            }
+
+            <span class="code-comment">/* :is() = Mantiene especificidad (más difícil) */</span>
+            <span class="code-highlight">:is(.demo-box-is)</span> {
+            background: red;
+            }
+
+            .demo-box-is.override {  <span class="code-comment">/* ❌ NO funciona */</span>
+            background: green;      <span class="code-comment">/* Necesitas más especificidad */</span>
+            }
+        </div>
+
+        <div class="specificity-demo">
+            <div class="demo-box override">
+                ✅ :where() + .override = Verde (funciona)
+            </div>
+            <div class="demo-box-is override-attempt">
+                ❌ :is() + .override = Rojo (no funciona, :is() gana)
+            </div>
+        </div>
+
+        <div class="success-box">
+            <strong>💡 Cuándo usar cada uno:</strong><br>
+            • <code>:where()</code> → Estilos base que quieres que sean fáciles de sobreescribir<br>
+            • <code>:is()</code> → Cuando quieres mantener la especificidad normal
+        </div>
+    </div>
+
+    <!-- DEMO 4: :not() avanzado -->
+    <div class="section">
+        <h2 class="section-title">4️⃣ :not() - Exclusión múltiple</h2>
+        <p class="subtitle">Ahora puedes excluir múltiples condiciones a la vez.</p>
+
+        <div class="code-block">
+            <span class="code-comment">/* Excluir varios estados a la vez */</span>
+            li<span class="code-highlight">:not(.disabled, .hidden, [data-archived="true"])</span> {
+            cursor: pointer;
+            }
+
+            li<span class="code-highlight">:not(.disabled, .hidden, [data-archived="true"])</span>:hover {
+            background: lightblue;
+            }
+        </div>
+
+        <ul class="list-demo">
+            <li>Item normal (hover funciona)</li>
+            <li class="disabled">Item deshabilitado (sin hover)</li>
+            <li>Item normal (hover funciona)</li>
+            <li class="hidden">Item oculto (no visible)</li>
+            <li data-archived="true">Item archivado (sin hover)</li>
+            <li>Item normal (hover funciona)</li>
+        </ul>
+    </div>
+
+    <!-- DEMO 5: Formularios inteligentes -->
+    <div class="section">
+        <h2 class="section-title">5️⃣ Formularios inteligentes con :has()</h2>
+        <p class="subtitle">El formulario cambia de color según sus inputs. Sin JavaScript.</p>
+
+        <div class="code-block">
+            <span class="code-comment">/* Si hay inputs inválidos → amarillo */</span>
+            .form<span class="code-highlight">:has(input:invalid)</span> {
+            background: yellow;
+            }
+
+            <span class="code-comment">/* Si todos son válidos → verde */</span>
+            .form<span class="code-highlight">:has(input:not(:placeholder-shown)):not(:has(input:invalid))</span> {
+            background: lightgreen;
+            }
+        </div>
+
+        <form class="smart-form">
+            <div class="form-group">
+                <label>Email (requerido)</label>
+                <input type="email" required placeholder="tu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Nombre (mínimo 3 caracteres)</label>
+                <input type="text" required minlength="3" placeholder="Tu nombre">
+            </div>
+            <div class="form-group">
+                <label>Edad (18-100)</label>
+                <input type="number" required min="18" max="100" placeholder="25">
+            </div>
+            <p style="color: #64748b; font-size: 0.9rem; margin-top: 0.5rem;">
+                Rellena los campos correctamente para ver el formulario en verde.
+            </p>
+        </form>
+    </div>
+
+    <!-- DEMO 6: Tabs sin JavaScript -->
+    <div class="section">
+        <h2 class="section-title">6️⃣ Sistema de Tabs sin JavaScript</h2>
+        <p class="subtitle">Usando :has() + radio buttons. 100% CSS.</p>
+
+        <div class="code-block">
+            <span class="code-comment">/* Mostrar contenido si su radio está checked */</span>
+            .tabs<span class="code-highlight">:has(#tab1:checked)</span> #content1 {
+            display: block;
+            }
+
+            <span class="code-comment">/* Estilo del label activo */</span>
+            .tabs<span class="code-highlight">:has(#tab1:checked)</span> label[for="tab1"] {
+            color: blue;
+            border-bottom: 3px solid blue;
+            }
+        </div>
+
+        <div class="tabs-demo">
+            <input type="radio" name="tabs" id="tab1" checked>
+            <input type="radio" name="tabs" id="tab2">
+            <input type="radio" name="tabs" id="tab3">
+
+            <div class="tabs">
+                <label for="tab1">Pestaña 1</label>
+                <label for="tab2">Pestaña 2</label>
+                <label for="tab3">Pestaña 3</label>
+            </div>
+
+            <div class="tab-content" id="content1">
+                <h3>Contenido de la Pestaña 1</h3>
+                <p>Este es el contenido de la primera pestaña. Sin una línea de JavaScript.</p>
+            </div>
+
+            <div class="tab-content" id="content2">
+                <h3>Contenido de la Pestaña 2</h3>
+                <p>Contenido de la segunda pestaña. Todo funciona con :has() y radio buttons.</p>
+            </div>
+
+            <div class="tab-content" id="content3">
+                <h3>Contenido de la Pestaña 3</h3>
+                <p>Tercera pestaña. Increíble lo que se puede hacer con CSS moderno.</p>
+            </div>
+        </div>
+    </div>
+
+</div>

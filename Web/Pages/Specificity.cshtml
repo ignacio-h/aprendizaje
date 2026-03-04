@@ -1,0 +1,606 @@
+﻿@page
+@{
+    ViewData["Title"] = "Especificidad";
+}
+
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        margin-bottom: 2rem;
+    }
+
+    .section {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2563eb;
+    }
+
+    .subtitle {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+    }
+
+    .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        margin: 1rem 0;
+    }
+
+    .code-comment {
+        color: #94a3b8;
+    }
+
+    .highlight {
+        color: #fbbf24;
+        font-weight: 600;
+    }
+
+    .red {
+        color: #dc2626;
+    }
+
+    .green {
+        color: #10b981;
+    }
+
+    .blue {
+        color: #2563eb;
+    }
+
+    /* ============================================
+                   EJEMPLO 1: Conflicto básico
+                   ============================================ */
+
+    /* 1 punto */
+    .demo1 p {
+        color: red;
+        background: #fee2e2;
+        padding: 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+    }
+
+    /* 10 puntos - GANA */
+    .demo1 .texto {
+        color: blue;
+        background: #dbeafe;
+    }
+
+    /* ============================================
+                   EJEMPLO 2: Escalera de especificidad
+                   ============================================ */
+
+    /* 1 punto */
+    .demo2 p {
+        color: #64748b;
+        padding: 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+    }
+
+    /* 10 puntos */
+    .demo2 .nivel1 {
+        color: #3b82f6;
+        background: #eff6ff;
+        border-color: #93c5fd;
+    }
+
+        /* 20 puntos */
+        .demo2 .nivel1.nivel2 {
+            color: #f59e0b;
+            background: #fef3c7;
+            border-color: #fcd34d;
+        }
+
+    /* 100 puntos */
+    .demo2 #nivel3 {
+        color: #10b981;
+        background: #d1fae5;
+        border-color: #6ee7b7;
+    }
+
+    /* ============================================
+                   EJEMPLO 3: :is() mantiene especificidad
+                   ============================================ */
+
+    .demo3 p {
+        padding: 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        background: #f8fafc;
+        border: 3px solid #e2e8f0;
+    }
+
+    /* Especificidad de .box1 = 10 puntos */
+    .demo3 :is(.box1, .box2, .box3) {
+        background: #fee2e2;
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+
+    /* Solo 10 puntos - NO puede sobreescribir :is() que también tiene 10 */
+    .demo3 .override-is {
+        background: #d1fae5;
+        border-color: #10b981;
+        color: #10b981;
+    }
+
+    /* Necesitas MÁS especificidad */
+    .demo3 p.override-is-strong {
+        background: #d1fae5;
+        border-color: #10b981;
+        color: #10b981;
+    }
+
+    /* ============================================
+                   EJEMPLO 4: :where() tiene especificidad 0
+                   ============================================ */
+
+    .demo4 p {
+        padding: 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        background: #f8fafc;
+        border: 3px solid #e2e8f0;
+    }
+
+    /* Especificidad = 0 puntos (por :where()) */
+    .demo4 :where(.box1, .box2, .box3) {
+        background: #fee2e2;
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+
+    /* Solo 10 puntos - SÍ puede sobreescribir :where() que tiene 0 */
+    .demo4 .override-where {
+        background: #d1fae5;
+        border-color: #10b981;
+        color: #10b981;
+    }
+
+    /* ============================================
+                   TABLA DE PUNTOS
+                   ============================================ */
+
+    .points-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+    }
+
+        .points-table th,
+        .points-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+
+        .points-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .points-table tr:hover {
+            background: #f8fafc;
+        }
+
+    .points-badge {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .winner-badge {
+        background: #10b981;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .info-box {
+        background: #f0f9ff;
+        border-left: 4px solid #0284c7;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    code {
+        background: #f1f5f9;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #be123c;
+        font-size: 0.9rem;
+    }
+
+    .visual-scale {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0;
+        align-items: flex-end;
+    }
+
+    .scale-bar {
+        flex: 1;
+        background: linear-gradient(to top, #2563eb, #60a5fa);
+        border-radius: 6px 6px 0 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 1rem;
+        color: white;
+        font-weight: 600;
+        transition: transform 0.3s;
+    }
+
+        .scale-bar:hover {
+            transform: translateY(-10px);
+        }
+
+    .scale-label {
+        margin-top: 0.5rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #64748b;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container">
+    <h1>📊 Especificidad CSS: De 0 a 100</h1>
+
+    <!-- INTRO -->
+    <div class="section">
+        <h2 class="section-title">🤔 ¿Qué es la especificidad?</h2>
+        <p class="subtitle">
+            Es el sistema de puntos que CSS usa para decidir <strong>qué regla gana</strong> cuando hay conflicto.
+        </p>
+
+        <div class="info-box">
+            <strong>💡 Regla de oro:</strong><br>
+            Cuando dos selectores apuntan al mismo elemento con propiedades diferentes, gana el que tenga <strong>MÁS PUNTOS</strong>.
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem;">Sistema de puntos:</h3>
+
+        <table class="points-table">
+            <thead>
+                <tr>
+                    <th>Tipo de selector</th>
+                    <th>Puntos</th>
+                    <th>Ejemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Elementos</strong> (p, div, h1)</td>
+                    <td><span class="points-badge">1</span></td>
+                    <td><code>p { }</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Clases</strong> (.nombre)</td>
+                    <td><span class="points-badge">10</span></td>
+                    <td><code>.texto { }</code></td>
+                </tr>
+                <tr>
+                    <td><strong>IDs</strong> (#nombre)</td>
+                    <td><span class="points-badge">100</span></td>
+                    <td><code>#parrafo { }</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Inline styles</strong></td>
+                    <td><span class="points-badge">1000</span></td>
+                    <td><code>&lt;p style="..."&gt;</code></td>
+                </tr>
+                <tr>
+                    <td><strong>!important</strong></td>
+                    <td><span class="points-badge">10000</span></td>
+                    <td><code>color: red !important;</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="visual-scale">
+            <div>
+                <div class="scale-bar" style="height: 50px;">
+                    <div style="font-size: 1.5rem;">1</div>
+                </div>
+                <div class="scale-label">Elemento<br><code>p</code></div>
+            </div>
+            <div>
+                <div class="scale-bar" style="height: 150px;">
+                    <div style="font-size: 1.5rem;">10</div>
+                </div>
+                <div class="scale-label">Clase<br><code>.texto</code></div>
+            </div>
+            <div>
+                <div class="scale-bar" style="height: 300px;">
+                    <div style="font-size: 1.5rem;">100</div>
+                </div>
+                <div class="scale-label">ID<br><code>#parrafo</code></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EJEMPLO 1: Conflicto básico -->
+    <div class="section">
+        <h2 class="section-title">1️⃣ Ejemplo básico: ¿Quién gana?</h2>
+
+        <div class="code-block">
+            <span class="code-comment">/* Regla 1: 1 punto (elemento) */</span>
+            p {
+            color: <span class="red">red</span>;
+            }
+
+            <span class="code-comment">/* Regla 2: 10 puntos (clase) */</span>
+            .texto {
+            color: <span class="blue">blue</span>;
+            }
+
+            <span class="code-comment">/* Resultado: 10 > 1, gana AZUL */</span>
+        </div>
+
+        <div class="demo1">
+            <p class="texto">
+                Este texto es AZUL porque .texto (10 puntos) gana sobre p (1 punto)
+            </p>
+        </div>
+
+        <div class="success-box">
+            <strong>✅ Resultado:</strong> La clase tiene más puntos (10 vs 1), así que gana el azul.
+        </div>
+    </div>
+
+    <!-- EJEMPLO 2: Escalera de especificidad -->
+    <div class="section">
+        <h2 class="section-title">2️⃣ La escalera de especificidad</h2>
+        <p class="subtitle">Cada regla sobreescribe a la anterior porque tiene más puntos.</p>
+
+        <div class="code-block">
+            <span class="code-comment">/* 1 punto */</span>
+            p { color: gray; }
+
+            <span class="code-comment">/* 10 puntos - SOBREESCRIBE */</span>
+            .nivel1 { color: blue; }
+
+            <span class="code-comment">/* 20 puntos - SOBREESCRIBE */</span>
+            .nivel1.nivel2 { color: orange; }
+
+            <span class="code-comment">/* 100 puntos - SOBREESCRIBE */</span>
+            #nivel3 { color: green; }
+        </div>
+
+        <div class="demo2">
+            <p>Solo elemento (1 punto) - Gris</p>
+            <p class="nivel1">Con .nivel1 (10 puntos) - Azul</p>
+            <p class="nivel1 nivel2">Con .nivel1.nivel2 (20 puntos) - Naranja</p>
+            <p class="nivel1 nivel2" id="nivel3">Con #nivel3 (100 puntos) - Verde (GANA)</p>
+        </div>
+
+        <table class="points-table" style="margin-top: 1.5rem;">
+            <thead>
+                <tr>
+                    <th>Selector</th>
+                    <th>Cálculo</th>
+                    <th>Puntos totales</th>
+                    <th>Ganador</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>p</code></td>
+                    <td>1 elemento</td>
+                    <td><span class="points-badge">1</span></td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td><code>.nivel1</code></td>
+                    <td>1 clase</td>
+                    <td><span class="points-badge">10</span></td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td><code>.nivel1.nivel2</code></td>
+                    <td>2 clases</td>
+                    <td><span class="points-badge">20</span></td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td><code>#nivel3</code></td>
+                    <td>1 ID</td>
+                    <td><span class="points-badge">100</span></td>
+                    <td><span class="winner-badge">✅ GANA</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- EJEMPLO 3: :is() -->
+    <div class="section">
+        <h2 class="section-title">3️⃣ :is() - Mantiene la especificidad</h2>
+        <p class="subtitle">:is() usa la especificidad del selector MÁS ESPECÍFICO dentro de él.</p>
+
+        <div class="code-block">
+            <span class="comment">/* :is(.box1, .box2, .box3) */</span>
+            <span class="comment">/* Especificidad = 10 puntos (de .box1) */</span>
+            :is(.box1, .box2, .box3) {
+            color: <span class="red">red</span>;
+            }
+
+            <span class="comment">/* Solo clase = 10 puntos */</span>
+            .override-is {
+            color: <span class="green">green</span>;  <span class="comment">/* ❌ NO funciona (10 = 10, empate) */</span>
+            }
+
+            <span class="comment">/* Elemento + clase = 11 puntos */</span>
+            p.override-is-strong {
+            color: <span class="green">green</span>;  <span class="comment">/* ✅ Funciona (11 > 10) */</span>
+            }
+        </div>
+
+        <div class="demo3">
+            <p class="box1">Box 1 con :is() - Rojo (10 puntos)</p>
+            <p class="box1 override-is">Box 1 + .override-is - Sigue ROJO ❌ (10 = 10, :is() gana por orden)</p>
+            <p class="box1 override-is-strong">Box 1 + p.override-is-strong - Verde ✅ (11 > 10)</p>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Problema:</strong> Necesitas MÁS especificidad para sobreescribir :is(). Esto puede complicar tu CSS.
+        </div>
+    </div>
+
+    <!-- EJEMPLO 4: :where() -->
+    <div class="section">
+        <h2 class="section-title">4️⃣ :where() - Especificidad 0</h2>
+        <p class="subtitle">:where() SIEMPRE tiene 0 puntos, sin importar qué haya dentro.</p>
+
+        <div class="code-block">
+            <span class="comment">/* :where(.box1, .box2, .box3) */</span>
+            <span class="comment">/* Especificidad = 0 puntos (SIEMPRE) */</span>
+            :where(.box1, .box2, .box3) {
+            color: <span class="red">red</span>;
+            }
+
+            <span class="comment">/* Solo clase = 10 puntos */</span>
+            .override-where {
+            color: <span class="green">green</span>;  <span class="comment">/* ✅ Funciona (10 > 0) */</span>
+            }
+        </div>
+
+        <div class="demo4">
+            <p class="box1">Box 1 con :where() - Rojo (0 puntos)</p>
+            <p class="box1 override-where">Box 1 + .override-where - Verde ✅ (10 > 0)</p>
+        </div>
+
+        <div class="success-box">
+            <strong>✅ Ventaja:</strong> Fácil de sobreescribir. Perfecto para estilos base que quieres que sean flexibles.
+        </div>
+    </div>
+
+    <!-- COMPARACIÓN FINAL -->
+    <div class="section">
+        <h2 class="section-title">⚖️ :is() vs :where() - La diferencia clave</h2>
+
+        <table class="points-table">
+            <thead>
+                <tr>
+                    <th>Selector</th>
+                    <th>Especificidad</th>
+                    <th>Fácil de sobreescribir</th>
+                    <th>Cuándo usar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>:is(.a, .b)</code></td>
+                    <td><span class="points-badge">10</span> (usa el más alto)</td>
+                    <td>❌ Necesitas más especificidad</td>
+                    <td>Cuando quieres mantener peso normal</td>
+                </tr>
+                <tr>
+                    <td><code>:where(.a, .b)</code></td>
+                    <td><span class="points-badge">0</span> (siempre cero)</td>
+                    <td>✅ Cualquier clase lo sobreescribe</td>
+                    <td>Para estilos base/resets que quieres sobreescribir fácilmente</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin: 2rem 0 1rem;">Ejemplo práctico:</h3>
+
+        <div class="code-block">
+            <span class="comment">/* Reset con :where() - Fácil de sobreescribir */</span>
+            :where(ul, ol) {
+            list-style: none;
+            padding: 0;
+            }
+
+            .my-list {
+            padding: 1rem;  <span class="comment">/* ✅ Funciona sin problema */</span>
+            }
+
+            <span class="comment">/* Con :is() necesitarías más especificidad */</span>
+            :is(ul, ol) {
+            list-style: none;
+            padding: 0;
+            }
+
+            .my-list {
+            padding: 1rem;  <span class="comment">/* ❌ No funciona, :is() tiene 1 punto */</span>
+            }
+
+            ul.my-list {
+            padding: 1rem;  <span class="comment">/* ✅ Ahora sí (2 > 1) */</span>
+            }
+        </div>
+    </div>
+
+    <!-- RESUMEN -->
+    <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h2 style="color: white; margin-bottom: 1rem;">🎓 Resumen Final</h2>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+            <strong style="font-size: 1.1rem;">Especificidad = Puntos de autoridad</strong><br>
+            Elemento (1) < Clase (10) < ID (100)
+        </div>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+            <strong style="font-size: 1.1rem;">:is() = Mantiene la especificidad</strong><br>
+            Usa los puntos del selector más específico dentro
+        </div>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 6px;">
+            <strong style="font-size: 1.1rem;">:where() = Especificidad 0</strong><br>
+            Siempre 0 puntos, fácil de sobreescribir
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,605 @@
+﻿@page
+@{
+    ViewData["Title"] = "Cascada CSS";
+}
+
+<!-- NIVEL 1: CSS EXTERNO (simulado en <style> pero imagina que es site.css) -->
+<style id="external-css">
+    /* Esto simula tu site.css */
+    .demo-box {
+        background: #fee2e2;
+        color: #dc2626;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        border: 3px solid #dc2626;
+        font-weight: 600;
+    }
+</style>
+
+<!-- NIVEL 2: CSS EN <HEAD> (más abajo = más prioridad) -->
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        margin-bottom: 2rem;
+    }
+
+    .section {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2563eb;
+    }
+
+    .subtitle {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+    }
+
+    .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        margin: 1rem 0;
+    }
+
+    .comment {
+        color: #94a3b8;
+    }
+
+    .highlight {
+        color: #fbbf24;
+        font-weight: 600;
+    }
+
+    code {
+        background: #f1f5f9;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #be123c;
+        font-size: 0.9rem;
+    }
+
+    .priority-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+    }
+
+        .priority-table th,
+        .priority-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+
+        .priority-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .priority-table tr:hover {
+            background: #f8fafc;
+        }
+
+    .level-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+    }
+
+    .level-1 {
+        background: #6366f1;
+    }
+
+    .level-2 {
+        background: #8b5cf6;
+    }
+
+    .level-3 {
+        background: #a855f7;
+    }
+
+    .level-4 {
+        background: #c026d3;
+    }
+
+    .level-5 {
+        background: #db2777;
+    }
+
+    .info-box {
+        background: #f0f9ff;
+        border-left: 4px solid #0284c7;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    /* ============================================
+           DEMOS DE CASCADA
+           ============================================ */
+
+    /* Nivel 2 en HEAD - sobreescribe external */
+    .demo-box.from-head {
+        background: #dbeafe;
+        color: #2563eb;
+        border-color: #2563eb;
+    }
+
+    /* Orden importa: esto viene DESPUÉS */
+    .demo-box.order-matters-1 {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .demo-box.order-matters-2 {
+        background: #d1fae5;
+        color: #10b981;
+    }
+
+    /* Con misma especificidad, gana el último */
+    .box-a {
+        background: red;
+    }
+
+    .box-a {
+        background: blue;
+    }
+    /* Este gana */
+
+    /* ============================================
+           ESPECIFICIDAD vs ORDEN
+           ============================================ */
+
+    .demo-spec {
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        border: 3px solid;
+        font-weight: 600;
+    }
+
+        /* 20 puntos - viene primero */
+        .demo-spec.first {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        /* 20 puntos - viene después, GANA por orden */
+        .demo-spec.second {
+            background: #dbeafe;
+            color: #2563eb;
+            border-color: #2563eb;
+        }
+
+    /* 21 puntos - GANA por especificidad, no importa el orden */
+    div.demo-spec.high-spec {
+        background: #d1fae5;
+        color: #10b981;
+        border-color: #10b981;
+    }
+
+    /* ============================================
+           VISUAL DE PRIORIDAD
+           ============================================ */
+
+    .priority-visual {
+        display: grid;
+        gap: 0.5rem;
+        margin: 2rem 0;
+    }
+
+    .priority-level {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 6px;
+        font-weight: 600;
+        color: white;
+        position: relative;
+        transition: transform 0.2s;
+    }
+
+        .priority-level:hover {
+            transform: translateX(10px);
+        }
+
+    .priority-number {
+        width: 40px;
+        height: 40px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+    }
+
+    .arrow {
+        position: absolute;
+        right: 1rem;
+        font-size: 1.5rem;
+    }
+</style>
+
+<div class="container">
+    <h1>📍 Cascada CSS: Ubicación, Orden y Especificidad</h1>
+
+    <!-- SECCIÓN 1: LA JERARQUÍA COMPLETA -->
+    <div class="section">
+        <h2 class="section-title">🏆 La jerarquía completa (de menos a más prioridad)</h2>
+        <p class="subtitle">Cuando hay conflicto, gana el nivel más alto. Dentro del mismo nivel, gana el último.</p>
+
+        <div class="priority-visual">
+            <div class="priority-level" style="background: #94a3b8;">
+                <div class="priority-number">1</div>
+                <div>
+                    <strong>User Agent Styles</strong><br>
+                    <span style="opacity: 0.9; font-size: 0.9rem;">Estilos por defecto del navegador</span>
+                </div>
+                <div class="arrow">↓</div>
+            </div>
+
+            <div class="priority-level" style="background: #6366f1;">
+                <div class="priority-number">2</div>
+                <div>
+                    <strong>CSS Externo (site.css)</strong><br>
+                    <span style="opacity: 0.9; font-size: 0.9rem;">&lt;link rel="stylesheet" href="site.css"&gt;</span>
+                </div>
+                <div class="arrow">↓</div>
+            </div>
+
+            <div class="priority-level" style="background: #8b5cf6;">
+                <div class="priority-number">3</div>
+                <div>
+                    <strong>CSS en &lt;style&gt; en el &lt;head&gt;</strong><br>
+                    <span style="opacity: 0.9; font-size: 0.9rem;">En _Layout.cshtml o en la página</span>
+                </div>
+                <div class="arrow">↓</div>
+            </div>
+
+            <div class="priority-level" style="background: #a855f7;">
+                <div class="priority-number">4</div>
+                <div>
+                    <strong>CSS en &lt;style&gt; en el &lt;body&gt;</strong><br>
+                    <span style="opacity: 0.9; font-size: 0.9rem;">Dentro del contenido de la página</span>
+                </div>
+                <div class="arrow">↓</div>
+            </div>
+
+            <div class="priority-level" style="background: #c026d3;">
+                <div class="priority-number">5</div>
+                <div>
+                    <strong>Inline Styles</strong><br>
+                    <span style="opacity: 0.9; font-size: 0.9rem;">style="color: red;"</span>
+                </div>
+                <div class="arrow">↓</div>
+            </div>
+
+            <div class="priority-level" style="background: #db2777;">
+                <div class="priority-number">6</div>
+                <div>
+                    <strong>!important</strong><br>
+                    <span style="opacity: 0.9; font-size: 0.9rem;">color: red !important;</span>
+                </div>
+                <div class="arrow">🏆</div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Importante:</strong> Dentro del mismo nivel, si la especificidad es igual, gana el que viene ÚLTIMO en el código.
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: DEMOS VISUALES -->
+    <div class="section">
+        <h2 class="section-title">👀 Demos en vivo</h2>
+
+        <h3 style="margin-bottom: 1rem;">Demo 1: CSS Externo vs CSS en &lt;head&gt;</h3>
+        <div class="code-block">
+            <span class="comment">/* En site.css (nivel 2) */</span>
+            .demo-box {
+            background: <span style="color: #dc2626;">red</span>;
+            }
+
+            <span class="comment">/* En &lt;style&gt; en &lt;head&gt; (nivel 3) */</span>
+            .demo-box.from-head {
+            background: <span style="color: #2563eb;">blue</span>;  <span class="comment">/* Gana por estar en nivel más alto */</span>
+            }
+        </div>
+
+        <div class="demo-box">
+            CSS externo (simulado) - Rojo
+        </div>
+
+        <div class="demo-box from-head">
+            CSS en &lt;head&gt; - Azul (GANA)
+        </div>
+
+        <div class="success-box">
+            <strong>✅ Nivel 3 gana sobre Nivel 2</strong>, aunque ambos tienen la misma especificidad (10 puntos). -> esto es mentira, el segundo tiene 20 puntos.
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem;">Demo 2: Inline styles (el más poderoso)</h3>
+        <div class="code-block">
+            <span class="comment">/* En CSS */</span>
+            .demo-box {
+            background: blue;
+            color: white;
+            }
+
+            <span class="comment">/* Inline style SIEMPRE gana */</span>
+            &lt;div class="demo-box" <span class="highlight">style="background: green;"</span>&gt;
+        </div>
+
+        <div class="demo-box from-head">
+            Sin inline style - Azul
+        </div>
+
+        <div class="demo-box from-head" style="background: #10b981; color: white; border-color: #10b981;">
+            Con inline style - Verde (GANA)
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Por esto evitamos inline styles:</strong> Son tan poderosos que luego es muy difícil sobreescribirlos desde CSS. Solo !important puede ganarles.
+        </div>
+    </div>
+
+    <!-- SECCIÓN 3: ORDEN IMPORTA -->
+    <div class="section">
+        <h2 class="section-title">🔄 Orden importa (con misma especificidad)</h2>
+
+        <h3 style="margin-bottom: 1rem;">Caso A: Misma clase aplicada dos veces</h3>
+        <div class="code-block">
+            <span class="comment">/* Primera declaración */</span>
+            .demo-box.order-matters-1 {
+            background: red;
+            }
+
+            <span class="comment">/* Segunda declaración - GANA por venir después */</span>
+            .demo-box.order-matters-2 {
+            background: green;
+            }
+        </div>
+
+        <div class="demo-box order-matters-1 order-matters-2">
+            Tiene ambas clases: order-matters-1 y order-matters-2
+            <br>Verde gana porque su definición viene DESPUÉS en el CSS
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem;">Caso B: Mismo selector definido dos veces</h3>
+        <div class="code-block">
+            <span class="comment">/* Primera declaración */</span>
+            .box-a { background: red; }
+
+            <span class="comment">/* Segunda declaración - GANA */</span>
+            .box-a { background: blue; }
+        </div>
+
+        <div class="info-box">
+            <strong>💡 Regla del orden:</strong> Si dos selectores tienen la MISMA especificidad y están en el MISMO nivel, gana el que aparece ÚLTIMO en el código.
+        </div>
+    </div>
+
+    <!-- SECCIÓN 4: ESPECIFICIDAD GANA SOBRE ORDEN -->
+    <div class="section">
+        <h2 class="section-title">⚔️ Especificidad vs Orden: ¿Quién gana?</h2>
+        <p class="subtitle">La especificidad SIEMPRE gana sobre el orden.</p>
+
+        <div class="code-block">
+            <span class="comment">/* 20 puntos - viene primero */</span>
+            .demo-spec.first {
+            background: red;
+            }
+
+            <span class="comment">/* 20 puntos - viene después */</span>
+            .demo-spec.second {
+            background: blue;  <span class="comment">/* Gana por orden (20 = 20) */</span>
+            }
+
+            <span class="comment">/* 21 puntos - GANA aunque venga primero */</span>
+            div.demo-spec.high-spec {
+            background: green;  <span class="comment">/* Gana por especificidad (21 > 20) */</span>
+            }
+        </div>
+
+        <div class="demo-spec first second">
+            Ambas clases, misma especificidad (20 puntos cada una)
+            <br>Azul gana por orden
+        </div>
+
+        <div class="demo-spec first second high-spec">
+            Tres clases, pero high-spec tiene más especificidad (21 puntos)
+            <br>Verde gana aunque su definición esté ANTES que .second
+        </div>
+
+        <div class="success-box">
+            <strong>✅ Orden de decisión:</strong><br>
+            1. Primero mira el <strong>nivel</strong> (inline > &lt;style&gt; > externo)<br>
+            2. Luego mira la <strong>especificidad</strong> (ID > clase > elemento)<br>
+            3. Por último mira el <strong>orden</strong> (el último gana)
+        </div>
+    </div>
+
+    <!-- SECCIÓN 5: TU CASO EN RAZOR PAGES -->
+    <div class="section">
+        <h2 class="section-title">🏗️ Tu caso: Razor Pages con _Layout.cshtml</h2>
+
+        <div class="code-block">
+            <span class="comment">&lt;!-- _Layout.cshtml --&gt;</span>
+            &lt;head&gt;
+            <span class="comment">&lt;!-- Nivel 2: CSS externo --&gt;</span>
+            &lt;link rel="stylesheet" href="~/css/site.css"&gt;
+
+            <span class="comment">&lt;!-- Nivel 3: CSS en head del layout --&gt;</span>
+            &lt;style&gt;
+            .container { max-width: 1200px; }
+            &lt;/style&gt;
+
+            <span class="comment">&lt;!-- RenderSection permite a las páginas añadir estilos --&gt;</span>
+            @@RenderSection("Styles", required: false)
+            &lt;/head&gt;
+            &lt;body&gt;
+            @@RenderBody()
+            &lt;/body&gt;
+
+            <span class="comment">&lt;!-- Index.cshtml --&gt;</span>
+            @@section Styles {
+                <span class="comment">&lt;!-- Nivel 3: Pero viene DESPUÉS del layout --&gt;</span>
+                &lt;style&gt;
+                .container { max-width: 800px; }  <span class="comment">/* GANA por orden */</span>
+                &lt;/style&gt;
+            }
+
+            <span class="comment">&lt;!-- O directamente en el body --&gt;</span>
+            &lt;style&gt;
+            <span class="comment">&lt;!-- Nivel 4: CSS en body --&gt;</span>
+            .container { max-width: 600px; }  <span class="comment">/* GANA por nivel */</span>
+            &lt;/style&gt;
+
+            <span class="comment">&lt;!-- Nivel 5: Inline (máxima prioridad) --&gt;</span>
+            &lt;div class="container" <span class="highlight">style="max-width: 400px;"</span>&gt;
+            <span class="comment">&lt;!-- GANA sobre todo lo anterior --&gt;</span>
+            &lt;/div&gt;
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem;">Recomendaciones para Razor Pages:</h3>
+
+        <table class="priority-table">
+            <thead>
+                <tr>
+                    <th>Tipo de estilo</th>
+                    <th>Dónde ponerlo</th>
+                    <th>Cuándo usarlo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Estilos globales</strong></td>
+                    <td><code>site.css</code></td>
+                    <td>Layout general, reset, utilidades</td>
+                </tr>
+                <tr>
+                    <td><strong>Estilos del layout</strong></td>
+                    <td><code>&lt;style&gt;</code> en <code>_Layout.cshtml</code></td>
+                    <td>Header, footer, navegación</td>
+                </tr>
+                <tr>
+                    <td><strong>Estilos de página</strong></td>
+                    <td><code>@@section Styles { }</code> en página</td>
+                    <td>Estilos específicos de una página</td>
+                </tr>
+                <tr>
+                    <td><strong>Estilos de componente</strong></td>
+                    <td><code>&lt;style&gt;</code> en body de página</td>
+                    <td>Componente único en esa página</td>
+                </tr>
+                <tr>
+                    <td><strong>Inline styles</strong></td>
+                    <td><code>style="..."</code></td>
+                    <td>🚫 Evitar. Solo para estilos dinámicos desde C#</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECCIÓN 6: !important -->
+    <div class="section">
+        <h2 class="section-title">💣 !important - El arma nuclear</h2>
+
+        <div class="code-block">
+            <span class="comment">/* Inline style (nivel 5) */</span>
+            &lt;div style="color: blue;"&gt;
+
+            <span class="comment">/* !important GANA incluso sobre inline */</span>
+            div {
+            color: red <span class="highlight">!important</span>;  <span class="comment">/* GANA */</span>
+            }
+        </div>
+
+        <div style="color: blue;">
+            Texto con inline style (azul)
+        </div>
+
+        <div style="color: blue; color: red !important;">
+            Con !important inline (rojo) - máxima prioridad
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Evita !important:</strong><br>
+            • Rompe la cascada natural de CSS<br>
+            • Hace el código difícil de mantener<br>
+            • Solo úsalo para sobreescribir CSS de terceros que no puedes modificar<br>
+            • En tu propio código, mejor usa mayor especificidad
+        </div>
+    </div>
+
+    <!-- RESUMEN FINAL -->
+    <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h2 style="color: white; margin-bottom: 1rem;">🎓 Fórmula maestra</h2>
+
+        <div style="font-size: 1.25rem; text-align: center; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 8px; margin: 1rem 0;">
+            <strong>Nivel > Especificidad > Orden</strong>
+        </div>
+
+        <div style="display: grid; gap: 1rem; margin-top: 2rem;">
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 6px;">
+                <strong>1. Nivel:</strong> Inline > &lt;style&gt; body > &lt;style&gt; head > CSS externo
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 6px;">
+                <strong>2. Especificidad:</strong> ID (100) > Clase (10) > Elemento (1)
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 6px;">
+                <strong>3. Orden:</strong> Con mismo nivel y especificidad, gana el último
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ESTILOS EN BODY PARA DEMOSTRAR NIVEL 4 -->
+<style>
+    /* Este CSS está en el body, nivel 4 */
+    /* Sobreescribiría cualquier CSS del head con misma especificidad */
+</style>
