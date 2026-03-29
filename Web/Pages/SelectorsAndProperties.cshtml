@@ -354,13 +354,14 @@
         display: none;
         padding: 1.5rem;
         background: white;
-        border-radius: 6px;
+        border-radius: 50px;
         border: 2px solid #e2e8f0;
     }
 
     /* 🔥 Si el input radio está checked, mostrar su contenido */
     .tabs-demo:has(#tab1:checked) #content1,
     .tabs-demo:has(#tab2:checked) #content2,
+    .tabs-demo:has(#tab4:checked) #content4,
     .tabs-demo:has(#tab3:checked) #content3 {
         display: block;
     }
@@ -383,9 +384,7 @@
         }
 
     /* 🔥 Estilo del label cuando su radio está checked */
-    .tabs-demo:has(#tab1:checked) label[for="tab1"],
-    .tabs-demo:has(#tab2:checked) label[for="tab2"],
-    .tabs-demo:has(#tab3:checked) label[for="tab3"] {
+    .tabs > label:has(input:checked) {
         color: #2563eb;
         border-bottom-color: #2563eb;
     }
@@ -614,14 +613,11 @@
         </div>
 
         <div class="tabs-demo">
-            <input type="radio" name="tabs" id="tab1" checked>
-            <input type="radio" name="tabs" id="tab2">
-            <input type="radio" name="tabs" id="tab3">
-
             <div class="tabs">
-                <label for="tab1">Pestaña 1</label>
-                <label for="tab2">Pestaña 2</label>
-                <label for="tab3">Pestaña 3</label>
+                <label>Pestaña 1<input type="radio" name="tabs" id="tab1" checked></label>
+                <label>Pestaña 2<input type="radio" name="tabs" id="tab2"></label>
+                <label>Pestaña 3<input type="radio" name="tabs" id="tab3"></label>
+                <label>Pestaña 4<input type="radio" name="tabs" id="tab4"></label>
             </div>
 
             <div class="tab-content" id="content1">
@@ -637,6 +633,11 @@
             <div class="tab-content" id="content3">
                 <h3>Contenido de la Pestaña 3</h3>
                 <p>Tercera pestaña. Increíble lo que se puede hacer con CSS moderno.</p>
+            </div>
+
+            <div class="tab-content" id="content4">
+                <h3>Contenido de la Pestaña 4</h3>
+                <p>Cuarta pestaña. Increíble lo que se puede hacer con CSS moderno.</p>
             </div>
         </div>
     </div>
