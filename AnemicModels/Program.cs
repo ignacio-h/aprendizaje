@@ -1,4 +1,4 @@
-﻿
+﻿/*
 public interface IOrderService
 {
     void AddLine(Order order, Order.Line line);
@@ -44,7 +44,7 @@ public class OrderService : IOrderService
 
     public double GetTotal(Order order)
     {
-        // Se repiten validaciones
+        // Más validaciones...
         ArgumentNullException.ThrowIfNull(order, nameof(order));
 
         // no debería haber nulls, pero tampoco podemos estar 100% seguros
@@ -53,7 +53,7 @@ public class OrderService : IOrderService
 
     public void ConfirmOrder(Order order)
     {
-        // Se repiten validaciones
+        // Se repiten validaciones...
         ArgumentNullException.ThrowIfNull(order, nameof(order));
         if (order.Status != Order.StatusOption.Pending)
             throw new InvalidOperationException("...");
@@ -64,9 +64,9 @@ public class OrderService : IOrderService
         order.Status = Order.StatusOption.Confirmed;
     }
 }
+*/
 
 
-/*
 public class Order
 {
     public enum StatusOption
@@ -128,7 +128,6 @@ public class Order
         Status = StatusOption.Confirmed;
     }
 }
-*/
 
 
 
