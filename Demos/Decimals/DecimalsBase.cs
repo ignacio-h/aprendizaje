@@ -21,7 +21,8 @@ namespace Demos.Decimals
         public int ForLoopSum()
         {
             int sum = 0;
-            foreach (var item in _data) sum += item;
+            foreach (var item in _data) 
+                sum += item;
             return sum;
         }
     }
